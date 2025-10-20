@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: play-server
+  namespace: "{{  }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: play-server
+  template:
+    metadata:
+      labels:
+        app: play-server
+    spec:
+      containers:
+      - name: play-server
+        image: {{  }}
+        envFrom:
+        - secretRef:
+            name: play-server-secret
+        - configMapRef:
+            name: play-server-config

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mail-server-config
+  namespace: "{{  }}"
+  labels:
+    app: mail-server
+data:
+  USER_SERVER_URL: "{{  }}"

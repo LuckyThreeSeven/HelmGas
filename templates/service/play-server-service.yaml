@@ -1,0 +1,16 @@
+# play-server-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: play-server-service
+  namespace: "{{  }}"
+spec:
+  selector:
+    app: play-server
+  ports:
+    - protocol: TCP
+      name: play-basic
+      port: 80
+      targetPort: 8000
+  type: ClusterIP

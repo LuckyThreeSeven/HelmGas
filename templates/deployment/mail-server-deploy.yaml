@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-server
+  namespace: "{{  }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mail-server
+  template:
+    metadata:
+      labels:
+        app: mail-server
+    spec:
+      containers:
+      - name: mail-server
+        image: {{  }}
+        envFrom:
+        - secretRef:
+            name: mail-server-secret
+        - configMapRef:
+            name: mail-server-config

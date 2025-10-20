@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: play-server-config
+  labels:
+    app: play-server
+  namespace: "{{  }}"
+data:
+  CLOUDFRONT_DOMAIN: "{{  }}" # neves-video-bucket 이랑 연결된 CLOUDFRONT ENDPOINT
+  CLOUDFRONT_EXPIRE_TIME: "{{  }}"
+  CORS_ALLOWED_ORIGINS: '["{{  }}"]'
