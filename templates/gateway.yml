@@ -1,0 +1,48 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: neves-gw
+  labels:
+    jwt: first
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-name: neves-lb
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-northeast-2:622703417916:certificate/d14d598b-3399-4180-9c8e-f9fb009f3075
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+  namespace: neves
+
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: neves-http
+      hostname: "api.neves-box.com"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: neves-https
+      hostname: "api.neves-box.com"
+      port: 443
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: monitoring-http
+      hostname: "mnt.neves-box.com"
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: monitoring-https
+      hostname: "mnt.neves-box.com"
+      port: 443
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same

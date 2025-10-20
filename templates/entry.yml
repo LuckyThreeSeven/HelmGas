@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-postgres-db
+spec:
+  hosts:
+  - "neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
+  ports:
+  - number: 5432
+    name: tcp-postgresql
+    protocol: TCP
+  resolution: DNS
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-gmail-smtp
+spec:
+  hosts:
+  - "smtp.gmail.com"
+  ports:
+  - number: 465
+    name: tcp-smtp-tls
+    protocol: TCP
+  resolution: DNS
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: external-s3
+spec:
+  hosts:
+  - "neves-video-bucket.s3.ap-northeast-2.amazonaws.com"
+  ports:
+  - number: 443
+    name: https-s3
+    protocol: HTTPS
+  - number: 80
+    name: http-s3
+    protocol: HTTP
+  resolution: DNS

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: status-server
+  namespace: neves
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: status
+  template:
+    metadata:
+      labels:
+        app: status
+        namespace: neves
+    spec:
+      containers:
+        - name: status-container
+          image: public.ecr.aws/k8s0f8l3/neves/status-service:latest
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: username
+            - name: RDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-secret
+                  key: password
+            - name: RDB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: status-config
+                  key: db_url
+            - name: RDB_DRIVER_CLASS
+              valueFrom:
+                configMapKeyRef:
+                  name: status-config
+                  key: driver
+            - name: RDB_DDL
+              valueFrom:
+                configMapKeyRef:
+                  name: status-config
+                  key: ddl
+            - name: MAIL_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: status-config
+                  key: mail_server
+            - name: DISCONNECTED_CRON
+              valueFrom:
+                configMapKeyRef:
+                  name: status-config
+                  key: disconnected_cron
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: status
+spec:
+  selector:
+    app: status
+  type: ClusterIP
+  ports:
+    - name: basic
+      protocol: TCP
+      port: 80
+      targetPort: 8080

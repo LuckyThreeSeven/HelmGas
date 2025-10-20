@@ -1,0 +1,15 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-authentication
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      jwt: first
+  jwtRules: # JWT 인증 규칙 정의
+    - issuer: "neves.com"
+      forwardOriginalToken: true
+      jwksUri: "http://user-server-service.neves.svc.cluster.local/users/.well-known/jwks.json"
+      fromHeaders:
+        - name: "WWW-Authorization"
