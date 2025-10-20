@@ -1,9 +1,10 @@
 # mail-server-service.yaml
+{{ $context := merge (dict "appName" $.Values.mailServer.name) . -}}
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: mail
+  name: {{ include "neves.name.svc" $context }}
   namespace: {{ .Values.teamName }}
 spec:
   selector:

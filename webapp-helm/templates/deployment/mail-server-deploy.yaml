@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mail-server
-        image: f'{{ printf "%s/%s:%s" .Values.image.root .Values.mailServer.image.repo .Values.mailServer.image.tag }}'
+        image: {{ printf "%s/%s:%s" .Values.image.root .Values.mailServer.image.repo .Values.mailServer.image.tag }}
         envFrom:
         - secretRef:
             name: mail-server-secret

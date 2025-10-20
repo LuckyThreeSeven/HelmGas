@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: play-server
-        image: f'{{ printf "%s/%s:%s" .Values.image.root .Values.playServer.image.repo .Values.playServer.image.tag }}'
+        image: {{ printf "%s/%s:%s" .Values.image.root .Values.playServer.image.repo .Values.playServer.image.tag }}
         envFrom:
         - secretRef:
             name: play-server-secret
