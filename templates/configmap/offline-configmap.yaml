@@ -1,0 +1,7 @@
+# play-server-configmap.yaml
+{{ if $.Values.offlineServer -}}
+{{- $context := merge (dict "app" $.Values.offlineServer) . -}}
+{{- include "neves.snipet.cm.header" $context }}
+data:
+  CONTAINER_DATA_PATH: {{ .Values.efs.container | quote }}
+{{- end -}}

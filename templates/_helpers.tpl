@@ -33,11 +33,11 @@ app: {{ include "neves.name.app" . | quote}}
 {{- end -}}
 
 {{- define "neves.name.pvc" -}}
-{{- printf "%s-pvc" .app.name -}}
+{{- printf "%s-pvc" . -}}
 {{- end -}}
 
 {{- define "neves.name.pv" -}}
-{{- printf "%s-pv" .app.name -}}
+{{- printf "%s-pv" . -}}
 {{- end -}}
 
 {{- define "neves.name.serviceentry" -}}
@@ -61,7 +61,7 @@ app: {{ include "neves.name.app" . | quote}}
 {{- end -}}
 
 {{- define "neves.snipet.deploy" -}}
-appVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "neves.name.deploy" . }}
@@ -71,29 +71,39 @@ metadata:
 spec:
   replicas: {{ .app.replicas }}
   selector:
-  matchLabels:
-    app: {{ include "neves.name.app" . }}
+    matchLabels:
+      app: {{ include "neves.name.app" . }}
   template:
     metadata:
       labels:
         {{- include "neves.commonLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "neves.name.container" . }}
-          image: {{ printf "%s/%s:%s" .Values.image.root .app.image.repo .app.image.tag }}
-          ports:
-            - containerPort: {{ .app.ports.container }}
+      - name: {{ include "neves.name.container" . }}
+{{ if .app.image.root }}
+        image: {{ printf "%s/%s:%s" .app.image.root .app.image.repo .app.image.tag }}
+{{ else }}
+        image: {{ printf "%s/%s:%s" .Values.image.root .app.image.repo .app.image.tag }}
+{{ end }}
+{{ if .app.ports }}
+        ports:
+        {{- range $port := .app.ports }}
+        - containerPort: {{ $port.container }}
+          protocol: {{ $port.protocol }}
+        {{- end -}}
+{{- end -}}
 {{- if or .app.config .app.secret }}
-          env:
+        env:
   {{- if .app.config }}
-            - configMapRef:
-                name: {{ include "neves.name.configmap" . }}
+          - configMapRef:
+              name: {{ include "neves.name.configmap" . }}
   {{- end -}}
   {{- if .app.secret }}
-            - configMapRef:
-                name: {{ include "neves.name.secret" . }}
+          - configMapRef:
+              name: {{ include "neves.name.secret" . }}
   {{- end -}}
 {{- end -}}
+
 {{- end -}}
 
 {{- define "neves.snipet.svc.cluster" -}}
@@ -109,11 +119,11 @@ spec:
     app: {{ include "neves.name.app" . }}
   type: ClusterIP
   ports:
-  {{- range $name, $val := .app.ports }}
-    - name: {{ $name }}
-      protocol: {{ $val.protocol }}
-      port: {{ $val.service }}
-      targetPort: {{ $val.container }}
+  {{- range $val := .app.ports }}
+  - name: {{ $val.name }}
+    protocol: {{ $val.protocol }}
+    port: {{ $val.service }}
+    targetPort: {{ $val.container }}
   {{ end -}}
 {{- end -}}
 
@@ -131,7 +141,7 @@ metadata:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "neves.name.configmap" . }}
+  name: {{ include "neves.name.secret" . }}
   namespace: {{ .Values.teamName }}
   labels:
     {{- include "neves.commonLabels" . | nindent 4 }}

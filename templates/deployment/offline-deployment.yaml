@@ -1,0 +1,12 @@
+# offline-deployment.yaml
+{{ if $.Values.offlineServer -}}
+{{- $context := merge (dict "app" $.Values.offlineServer) . -}}
+{{ include "neves.snipet.deploy" $context }}
+        volumeMounts:
+          - name: {{ $.Values.efs.name | quote }}
+            mountPath: {{ $.Values.efs.container | quote }}
+      volumes:
+        - name: {{ $.Values.efs.name | quote }}
+          persistentVolumeClaim:
+            claimName: {{ include "neves.name.pvc" $.Values.efs.name | quote }}
+{{- end -}}

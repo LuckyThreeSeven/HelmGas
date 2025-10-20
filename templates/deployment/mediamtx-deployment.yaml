@@ -1,0 +1,20 @@
+# status-deployment.yaml
+{{ if $.Values.mediamtxServer -}}
+{{- $context := merge (dict "app" $.Values.mediamtxServer) . -}}
+{{ include "neves.snipet.deploy" $context }}
+{{- with $.Values.mediamtxServer }}
+        volumeMounts:
+          - name: {{ .volumes.config.name | quote }}
+            mountPath: {{ .volumes.config.container |quote }}
+            subPath: {{ .configFile.name | quote }}
+          - name: {{ $.Values.efs.name | quote }}
+            mountPath: {{ $.Values.efs.container | quote }}
+      volumes:
+        - name: {{ .volumes.config.name | quote }}
+          configMap:
+            name: {{ include "neves.name.configmap" $context }}
+        - name: {{ $.Values.efs.name | quote }}
+          persistentVolumeClaim:
+            claimName: {{ include "neves.name.pvc" $.Values.efs.name | quote }}
+{{ end }}
+{{- end -}}

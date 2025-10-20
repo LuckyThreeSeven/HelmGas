@@ -1,0 +1,8 @@
+# play-server-configmap.yaml
+{{ if $.Values.mediamtxServer -}}
+{{- $context := merge (dict "app" $.Values.mediamtxServer) . -}}
+{{- include "neves.snipet.cm.header" $context }}
+data:
+  {{ .Values.mediamtxServer.configFile.name }}: |
+   {{ .Values.mediamtxServer.configFile.mtxConfig | toYaml | nindent 4 }}
+{{- end -}}
