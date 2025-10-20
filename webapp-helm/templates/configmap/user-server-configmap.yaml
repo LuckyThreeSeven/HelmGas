@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-server-config
+  labels:
+    app: user-server
+  namespace: {{ .Values.teamName }}
+data:
+  DB_HOST: {{ .Values.userServer.config.db.host }}
+  DB_NAME: {{ .Values.userServer.config.db.name }}
+  DB_PORT: {{ .Values.userServer.config.db.port }}
+  MAIL_API_URL: {{ .Values.mailServer.url }}
+  CORS_ALLOWED_ORIGINS: {{ .Values.userServer.corsAllowedOrigins }}

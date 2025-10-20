@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mail-server
-  namespace: "{{  }}"
+  namespace: {{ .Values.teamName }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.mailServer.replicas }}
   selector:
     matchLabels:
       app: mail-server
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: mail-server
-        image: {{  }}
+        image: {{ printf "%s/%s:%s" .Values.image.root .Values.mailServer.image.repo .Values.mailServer.image.tag }}
         envFrom:
         - secretRef:
             name: mail-server-secret

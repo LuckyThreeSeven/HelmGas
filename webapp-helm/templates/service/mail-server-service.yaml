@@ -1,0 +1,17 @@
+# mail-server-service.yaml
+{{ $context := merge (dict "appName" $.Values.mailServer.name) . -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "neves.name.svc" $context }}
+  namespace: {{ .Values.teamName }}
+spec:
+  selector:
+    app: mail-server
+  ports:
+    - protocol: TCP
+      name: mail-basic
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
