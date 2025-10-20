@@ -9,7 +9,7 @@ url:
 image:
   root: public.ecr.aws/k8s0f8l3/neves/
 
-status:
+statusServer:
   name: status
   image:
     repo: status-service
