@@ -1,0 +1,5 @@
+# mail-service.yaml
+{{ if $.Values.mailServer -}}
+{{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{ include "neves.snipet.svc.cluster" $context }}
+{{- end -}}

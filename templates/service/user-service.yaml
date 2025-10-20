@@ -1,0 +1,9 @@
+# user-service.yaml
+{{ if $.Values.userServer -}}
+{{- $context := merge (dict "app" $.Values.userServer) . -}}
+{{ include "neves.snipet.svc.cluster" $context }}
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+{{- end -}}

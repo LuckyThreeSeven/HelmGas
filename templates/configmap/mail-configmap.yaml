@@ -1,0 +1,8 @@
+# mail-configmap.yaml
+{{ if $.Values.mailServer -}}
+{{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{- $userApp := merge (dict "app" $.Values.userServer) . -}}
+{{- include "neves.snipet.cm.header" $context }}
+data:
+  USER_SERVER_URL: {{ include "neves.svc.path" $userApp | quote }}
+{{ end -}}

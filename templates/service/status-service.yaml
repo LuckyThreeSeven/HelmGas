@@ -1,0 +1,5 @@
+# status-service.yaml
+{{ if $.Values.statusServer -}}
+{{- $context := merge (dict "app" $.Values.statusServer) . -}}
+{{ include "neves.snipet.svc.cluster" $context }}
+{{- end -}}

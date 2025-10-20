@@ -1,0 +1,11 @@
+# play-server-configmap.yaml
+{{ if $.Values.playServer -}}
+{{- $context := merge (dict "app" $.Values.playServer) . -}}
+{{- include "neves.snipet.cm.header" $context }}
+data:
+{{ with $.Values.playServer.config }}
+  CLOUDFRONT_DOMAIN: {{ .cloudFront.domain | quote }}
+  CLOUDFRONT_EXPIRE_TIME: {{ .cloudFront.expireTime | quote }}
+  CORS_ALLOWED_ORIGINS: {{ .corsAllowedOrigins | quote }}
+{{ end -}}
+{{- end -}}

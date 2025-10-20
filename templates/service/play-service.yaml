@@ -1,0 +1,5 @@
+# play-service.yaml
+{{ if $.Values.playServer -}}
+{{- $context := merge (dict "app" $.Values.playServer) . -}}
+{{ include "neves.snipet.svc.cluster" $context }}
+{{- end -}}

@@ -1,0 +1,5 @@
+# status-deployment.yaml
+{{ if $.Values.userServer -}}
+{{- $context := merge (dict "app" $.Values.userServer) . -}}
+{{ include "neves.snipet.deploy" $context }}
+{{- end -}}
