@@ -1,0 +1,52 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-upload-server-deployment
+  namespace: neves
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-upload-server
+  template:
+    metadata:
+      labels:
+        app: db-upload-server
+    spec:
+      containers:
+      - name: db-upload-server-container
+        image: public.ecr.aws/k8s0f8l3/neves/db-upload-server:dev
+        env:
+          - name: AWS_DEFAULT_REGION
+            valueFrom:
+              configMapKeyRef:
+                name: db-upload-config
+                key: aws-default-region
+          - name: S3_BUCKET_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: db-upload-config
+                key: s3-bucket-name
+          - name: STATUS_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                name: db-upload-config
+                key: status-server-url
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: db-upload-secret
+                key: aws-access-key-id
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: db-upload-secret
+                key: aws-secret-access-key
+        volumeMounts:
+          - name: shared-efs-storage
+            mountPath: /recordings
+      volumes:
+        - name: shared-efs-storage
+          persistentVolumeClaim:
+            claimName: efs-shared-pvc

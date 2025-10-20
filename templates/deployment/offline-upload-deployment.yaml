@@ -1,0 +1,31 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: offline-upload-deployment
+  namespace: neves
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: offline-upload-server
+  template:
+    metadata:
+      labels:
+        app: offline-upload-server
+    spec:
+      containers:
+      - name: offline-upload-server-container
+        image: public.ecr.aws/k8s0f8l3/neves/offline-upload-server:chore-nvs
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: offline-server-config
+        volumeMounts:
+          - name: shared-efs-storage
+            mountPath: /recordings
+      volumes:
+        - name: shared-efs-storage
+          persistentVolumeClaim:
+            claimName: efs-shared-pvc

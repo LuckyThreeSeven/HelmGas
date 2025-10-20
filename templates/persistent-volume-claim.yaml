@@ -1,0 +1,14 @@
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-shared-pvc
+  namespace: neves
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 20Gi
+  volumeName: efs-shared-pv

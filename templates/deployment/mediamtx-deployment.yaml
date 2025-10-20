@@ -1,0 +1,40 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mediamtx-server-deployment
+  namespace: neves
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mediamtx-server
+  template:
+    metadata:
+      labels:
+        app: mediamtx-server
+    spec:
+      containers:
+      - name: mediamtx-server-container
+        image: bluenviron/mediamtx:latest
+        ports:
+        - name: srt-port
+          containerPort: 8890
+          protocol: UDP
+        - name: api-port
+          containerPort: 9997
+          protocol: TCP
+        volumeMounts:
+          - name: config-volume
+            mountPath: /mediamtx.yml
+            subPath: mediamtx.yml
+          - name: shared-efs-storage
+            mountPath: /recordings
+      volumes:
+        - name: config-volume
+          configMap:
+            name: mediamtx-server-config
+        - name: shared-efs-storage
+          persistentVolumeClaim:
+            claimName: efs-shared-pvc
+

@@ -1,0 +1,10 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-upload-config
+  namespace: neves
+data:
+  aws-default-region: "ap-northeast-2"
+  s3-bucket-name: "neves-video-bucket"
+  status-server-url: "http://status:80/metadata"

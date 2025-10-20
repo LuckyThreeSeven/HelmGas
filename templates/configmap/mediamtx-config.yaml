@@ -1,0 +1,25 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mediamtx-server-config
+  namespace: neves
+data:
+  mediamtx.yml: |
+    srt: yes
+    srtAddress: :8890
+
+    api: yes
+    apiAddress: :9997
+
+    pathDefaults:
+
+    paths:
+      '~^.*$':
+        source: publisher
+        record: yes
+        recordPath: ./recordings/%path/%Y%m%d-%H%M%S
+        recordFormat: fmp4
+        recordPartDuration: 30s
+        recordSegmentDuration: 30s
+        recordDeleteAfter: 24h
