@@ -1,0 +1,21 @@
+# status-service.yaml
+{{ $context := merge (dict "appName" $.Values.statusServer.name) . -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "neves.name.svc" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "neves.name.app" $context }}
+  type: ClusterIP
+  ports:
+    - name: basic
+      protocol: TCP
+      {{ with .Values.statusServer -}}
+      port: {{ .port.service }}
+      targetPort: {{ .port.container }}
+      {{ end -}}
