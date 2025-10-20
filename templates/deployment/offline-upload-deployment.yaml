@@ -1,31 +1,37 @@
-# deployment.yaml
+{{- $ := .Values.offlineUploadServer -}}
+{{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: offline-upload-deployment
-  namespace: neves
+  name: {{ include "neves.name.deploy" $context }}
+  namespace: {{ .Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ $.replicaCount }}
   selector:
     matchLabels:
-      app: offline-upload-server
+      app: {{ include "neves.name.app" $context | quote }}
   template:
     metadata:
       labels:
-        app: offline-upload-server
+        {{- include "neves.commonLabels" $context | nindent 8 }}
     spec:
       containers:
-      - name: offline-upload-server-container
-        image: public.ecr.aws/k8s0f8l3/neves/offline-upload-server:chore-nvs
+      - name: {{ include "neves.name.container" $context }}
+        image: "{{ .Values.image.root }}{{ $.image.repository }}:{{ $.image.tag }}"
+        imagePullPolicy: {{ $.image.pullPolicy }}
         ports:
-        - containerPort: 8000
+        - containerPort: {{ $.service.containerPort }}
         envFrom:
         - configMapRef:
-            name: offline-server-config
+            name: {{ include "neves.name.configmap" $context }}
         volumeMounts:
-          - name: shared-efs-storage
-            mountPath: /recordings
+          - name: {{ $.persistence.volumeName }}
+            mountPath: {{ $.persistence.mountPath }}
       volumes:
-        - name: shared-efs-storage
+        - name: {{ $.persistence.volumeName }}
           persistentVolumeClaim:
-            claimName: efs-shared-pvc
+            claimName: {{ $.persistence.existingClaim }}
+
