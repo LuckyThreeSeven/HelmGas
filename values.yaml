@@ -17,3 +17,25 @@ statusServer:
   config:
     db:
       url: ...
+
+dbUploadServer:
+  name: db-upload
+  image:
+    repo: db-upload-server
+    tag: dev
+    pullPolicy: IfNotPresent
+  replicas: 1
+  ports:
+    http: 8080
+  config:
+    aws:
+      defaultRegion: ap-northeast-2
+      s3BucketName: neves-video-bucket
+  secret:
+    awsAccessKeyId: "a"
+    awsSecretAccessKey: "b"
+  persistence:
+    enabled: true
+    name: shared-efs-storage
+    mountPath: /recordings
+    existingClaim: efs-shared-pvc

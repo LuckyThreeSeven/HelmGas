@@ -1,10 +1,25 @@
-# configmap.yaml
+{{- if .Values.dbUploadServer -}}
+{{- $appName := .Values.dbUploadServer.name -}}
+{{- $component := (default "batch" .Values.dbUploadServer.component) -}}
+{{- $status := .Values.statusServer -}}
+{{- $statusCtx := dict "Values" .Values "Chart" .Chart "Release" .Release "appName" $status.name "component" "misc" -}}
+{{- $svcName := include "neves.name.svc" $statusCtx -}}
+{{- $auto := printf "http://%s:80/metadata" $svcName -}}
+{{- $url := default $auto .Values.dbUploadServer.config.statusServerUrl -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: db-upload-config
-  namespace: neves
+  name: {{ include "neves.name.configmap" (dict
+      "Values" .Values "Chart" .Chart "Release" .Release
+      "appName" $appName "component" $component) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "neves.commonLabels" (dict
+        "Values" .Values "Chart" .Chart "Release" .Release
+        "appName" $appName "component" $component) | nindent 4 }}
 data:
-  aws-default-region: "ap-northeast-2"
-  s3-bucket-name: "neves-video-bucket"
-  status-server-url: "http://status:80/metadata"
+  aws-default-region: {{ .Values.dbUploadServer.config.aws.defaultRegion | quote }}
+  s3-bucket-name: {{ .Values.dbUploadServer.config.aws.s3BucketName | quote }}
+  status-server-url: {{ $url | quote }}
+{{- end }}

@@ -1,52 +1,99 @@
-# deployment.yaml
+{{- if .Values.dbUploadServer }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-upload-server-deployment
-  namespace: neves
+  name: {{ include "neves.name.deploy" (dict
+      "Values" .Values "Chart" .Chart "Release" .Release
+      "appName" .Values.dbUploadServer.name
+      "component" (.Values.dbUploadServer.component | default "batch")) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "neves.commonLabels" (dict
+        "Values" .Values "Chart" .Chart "Release" .Release
+        "appName" .Values.dbUploadServer.name
+        "component" (.Values.dbUploadServer.component | default "batch")) | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.dbUploadServer.replicas | default 1 }}
   selector:
     matchLabels:
-      app: db-upload-server
+      app: {{ include "neves.name.app" (dict
+          "Values" .Values "Chart" .Chart "Release" .Release
+          "appName" .Values.dbUploadServer.name
+          "component" (.Values.dbUploadServer.component | default "batch")) }}
   template:
     metadata:
       labels:
-        app: db-upload-server
+        app: {{ include "neves.name.app" (dict
+            "Values" .Values "Chart" .Chart "Release" .Release
+            "appName" .Values.dbUploadServer.name
+            "component" (.Values.dbUploadServer.component | default "batch")) }}
     spec:
+      {{- with .Values.global }}
+        {{- with .imagePullSecrets }}
+      imagePullSecrets:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
       containers:
-      - name: db-upload-server-container
-        image: public.ecr.aws/k8s0f8l3/neves/db-upload-server:dev
-        env:
-          - name: AWS_DEFAULT_REGION
-            valueFrom:
-              configMapKeyRef:
-                name: db-upload-config
-                key: aws-default-region
-          - name: S3_BUCKET_NAME
-            valueFrom:
-              configMapKeyRef:
-                name: db-upload-config
-                key: s3-bucket-name
-          - name: STATUS_SERVER_URL
-            valueFrom:
-              configMapKeyRef:
-                name: db-upload-config
-                key: status-server-url
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: db-upload-secret
-                key: aws-access-key-id
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: db-upload-secret
-                key: aws-secret-access-key
-        volumeMounts:
-          - name: shared-efs-storage
-            mountPath: /recordings
+        - name: {{ include "neves.name.container" (dict
+            "Values" .Values "Chart" .Chart "Release" .Release
+            "appName" .Values.dbUploadServer.name
+            "component" (.Values.dbUploadServer.component | default "batch")) }}
+          image: "{{ .Values.image.root }}{{ .Values.dbUploadServer.image.repo }}:{{ .Values.dbUploadServer.image.tag }}"
+          imagePullPolicy: {{ .Values.dbUploadServer.image.pullPolicy | default "IfNotPresent" }}
+          {{- if .Values.dbUploadServer.ports.http }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dbUploadServer.ports.http }}
+          {{- end }}
+          env:
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "neves.name.configmap" (dict
+                      "Values" .Values "Chart" .Chart "Release" .Release
+                      "appName" .Values.dbUploadServer.name
+                      "component" (.Values.dbUploadServer.component | default "batch")) }}
+                  key: aws-default-region
+            - name: S3_BUCKET_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "neves.name.configmap" (dict
+                      "Values" .Values "Chart" .Chart "Release" .Release
+                      "appName" .Values.dbUploadServer.name
+                      "component" (.Values.dbUploadServer.component | default "batch")) }}
+                  key: s3-bucket-name
+            - name: STATUS_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "neves.name.configmap" (dict
+                      "Values" .Values "Chart" .Chart "Release" .Release
+                      "appName" .Values.dbUploadServer.name
+                      "component" (.Values.dbUploadServer.component | default "batch")) }}
+                  key: status-server-url
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "neves.name.secret" (dict
+                      "Values" .Values "Chart" .Chart "Release" .Release
+                      "appName" .Values.dbUploadServer.name
+                      "component" (.Values.dbUploadServer.component | default "batch")) }}
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "neves.name.secret" (dict
+                      "Values" .Values "Chart" .Chart "Release" .Release
+                      "appName" .Values.dbUploadServer.name
+                      "component" (.Values.dbUploadServer.component | default "batch")) }}
+                  key: aws-secret-access-key
+
+          volumeMounts:
+            - name: {{ required "dbUploadServer.persistence.name is required" (.Values.dbUploadServer.persistence.name | default "data") }}
+              mountPath: {{ required "dbUploadServer.persistence.mountPath is required" .Values.dbUploadServer.persistence.mountPath }}
+
       volumes:
-        - name: shared-efs-storage
+        - name: {{ required "dbUploadServer.persistence.name is required" (.Values.dbUploadServer.persistence.name | default "data") }}
           persistentVolumeClaim:
-            claimName: efs-shared-pvc
+            claimName: {{ required "dbUploadServer.persistence.existingClaim is required" .Values.dbUploadServer.persistence.existingClaim }}
+{{- end }}
