@@ -1,0 +1,20 @@
+# status-configmap.yaml
+{{ $context := merge (dict "appName" $.Values.statusServer.name) . -}}
+{{ $mailApp := (dict "appName" $.Values.mailServer.name) }}
+{{- $mailSvc := (include "neves.name.svc" $mailApp) -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "neves.name.configmap" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+{{ with .Values.statusServer.config -}}
+data:
+  RDB_URL: {{ printf "jdbc:%s/%s" .db.url .db.name | quote }}
+  RDB_DRIVER_CLASS: {{ .db.driver | quote }}
+  DB_DDL: {{ .db.ddl | quote }}
+  DISCONNECTED_CRON: {{ .disconnectedCron | quote }}
+  MAIL_SERVICE_URL: {{ printf "%s.%s.svc.cluster.local" $mailSvc $.Values.teamName | quote }}
+{{ end -}}

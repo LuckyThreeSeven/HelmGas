@@ -9,44 +9,43 @@ app.kubernetes.io/managed-by: Helm
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/part-of: {{ .Chart.Name | quote}}
-app.kubernetes.io/component: {{ .component | quote }}
 app: {{ include "neves.name.app" . | quote}}
 {{- end -}}
 
 {{- define "neves.name.deploy" -}}
-{{- printf "%s-deploy" (include "neves.app.name" .) -}}
+{{- printf "%s-deploy" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.svc" -}}
-{{- printf "%s-svc" (include "neves.app.name" .) -}}
+{{- printf "%s-svc" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.container" -}}
-{{- printf "%s-container" (include "neves.app.name" .) -}}
+{{- printf "%s-container" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.configmap" -}}
-{{- printf "%s-configmap" (include "neves.app.name" .) -}}
+{{- printf "%s-configmap" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.secret" -}}
-{{- printf "%s-secret" (include "neves.app.name" .) -}}
+{{- printf "%s-secret" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.gw" -}}
-{{- printf "%s-gw" (include "neves.app.name" .) -}}
+{{- printf "%s-gw" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.pvc" -}}
-{{- printf "%s-pvc" (include "neves.app.name" .) -}}
+{{- printf "%s-pvc" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.pv" -}}
-{{- printf "%s-pv" (include "neves.app.name" .) -}}
+{{- printf "%s-pv" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.httproute" -}}
-{{- printf "%s-httproute" (include "neves.app.name" .) -}}
+{{- printf "%s-httproute" (include "neves.name.app" .) -}}
 {{- end -}}
 
 {{- define "neves.name.serviceentry" -}}
