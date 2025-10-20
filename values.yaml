@@ -17,3 +17,75 @@ statusServer:
   config:
     db:
       url: ...
+
+offlineUploadServer:
+  appName: offline-upload-server
+  replicaCount: 1
+  image:
+    repository: offline-upload-server
+    tag: chore-nvs
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8001
+    containerPort: 8000
+  persistence:
+    enabled: true
+    existingClaim: efs-shared-pvc
+    mountPath: /recordings
+    volumeName: shared-efs-storage
+
+
+mediamtxServer:
+  appName: mediamtx-server
+  replicaCount: 1
+  image:
+    repository: bluenviron/mediamtx
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: 9997
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+      service.beta.kubernetes.io/aws-load-balancer-name: streaming-lb
+    ports:
+      api:
+        port: 9997
+        targetPort: 9997
+        protocol: TCP
+      srt:
+        port: 8890
+        targetPort: 8890
+        protocol: UDP
+
+  containerPorts:
+    api: 9997
+    srt: 8890
+
+  persistence:
+    enabled: true
+    existingClaim: efs-shared-pvc
+    mountPath: /recordings
+    volumeName: shared-efs-storage
+
+  config: |
+    srt: yes
+    srtAddress: :{{ .Values.mediamtxServer.containerPorts.srt }}
+
+    api: yes
+    apiAddress: :{{ .Values.mediamtxServer.containerPorts.api }}
+
+    pathDefaults:
+
+    paths:
+      '~^.*$':
+        source: publisher
+        record: yes
+        recordPath: .{{ .Values.mediamtxServer.persistence.mountPath }}/%path/%Y%m%d-%H%M%S
+        recordFormat: fmp4
+        recordPartDuration: 30s
+        recordSegmentDuration: 30s
+        recordDeleteAfter: 24h
+
