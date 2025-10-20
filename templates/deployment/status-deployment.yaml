@@ -1,0 +1,31 @@
+# status-deployment.yaml
+
+{{- $context := merge (dict "appName" $.Values.statusServer.name) . -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "neves.name.deploy" $context }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+  namespace: {{ $.Values.teamName }}
+spec:
+  replicas: {{ $.Values.statusServer.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "neves.name.app" $context }}
+  template:
+    metadata:
+      labels:
+        {{- include "neves.commonLabels" $context | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "neves.name.container" $context }}
+          {{ with .Values.statusServer -}}
+          image: {{ printf "%s/%s:%s" $.Values.image.root .image.repo .image.tag }}
+          ports:
+            - containerPort: {{ .port.container }}
+          env:
+            - configMapRef:
+                name: {{ include "neves.name.configmap" $context }}
+          {{ end -}}
