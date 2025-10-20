@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: play-server
-  namespace: "{{  }}"
+  namespace: {{ .Values.teamName }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.playServer.replicas }}
   selector:
     matchLabels:
       app: play-server
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: play-server
-        image: {{  }}
+        image: f'{{ printf "%s/%s:%s" .Values.image.root .Values.playServer.image.repo .Values.playServer.image.tag }}'
         envFrom:
         - secretRef:
             name: play-server-secret

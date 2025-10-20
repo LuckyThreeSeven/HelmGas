@@ -1,16 +1,16 @@
-# play-server-service.yaml
+# mail-server-service.yaml
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: play-server-service
-  namespace: "{{  }}"
+  name: mail
+  namespace: {{ .Values.teamName }}
 spec:
   selector:
-    app: play-server
+    app: mail-server
   ports:
     - protocol: TCP
-      name: play-basic
+      name: mail-basic
       port: 80
       targetPort: 8000
   type: ClusterIP
