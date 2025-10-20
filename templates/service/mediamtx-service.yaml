@@ -5,7 +5,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "neves.name.svc" $context }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.teamName }}
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
   {{- with $.service.annotations }}

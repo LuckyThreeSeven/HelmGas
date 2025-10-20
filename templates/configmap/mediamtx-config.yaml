@@ -1,17 +1,14 @@
-{{- $ := .Values.offlineUploadServer -}}
+{{- $ := .Values.mediamtxServer -}}
 {{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
 
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "neves.name.configmap" $context }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.teamName }}
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 data:
-  HOST_PORT: {{ $.service.port | quote }}
-  CONTAINER_PORT: {{ $.service.containerPort | quote }}
-  {{- if $.persistence.enabled }}
-  CONTAINER_DATA_PATH: {{ $.persistence.mountPath | quote }}
-  {{- end }}
+  mediamtx.yml: |
+    {{- tpl .Values.mediamtxServer.config . | nindent 4 }}
 

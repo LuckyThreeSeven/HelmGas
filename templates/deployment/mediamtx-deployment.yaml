@@ -5,7 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "neves.name.deploy" $context }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.teamName }}
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 spec:
@@ -33,16 +33,12 @@ spec:
           - name: config-volume
             mountPath: /mediamtx.yml
             subPath: mediamtx.yml
-          {{- if $.persistence.enabled }}
           - name: {{ $.persistence.volumeName }}
             mountPath: {{ $.persistence.mountPath }}
-          {{- end }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "neves.name.configmap" $context }}
-        {{- if $.persistence.enabled }}
         - name: {{ $.persistence.volumeName }}
           persistentVolumeClaim:
             claimName: {{ $.persistence.existingClaim }}
-        {{- end }}
