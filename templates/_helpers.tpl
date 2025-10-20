@@ -1,62 +1,58 @@
-{{/*
-Expand the name of the chart.
-*/}}
-{{- define "HelmGas.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- define "neves.name.app" -}}
+{{- .appName | printf "%s-app" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "HelmGas.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{/*
-Create chart name and version as used by the chart label.
-*/}}
-{{- define "HelmGas.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-{{/*
-Common labels
-*/}}
-{{- define "HelmGas.labels" -}}
-helm.sh/chart: {{ include "HelmGas.chart" . }}
-{{ include "HelmGas.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "HelmGas.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "HelmGas.name" . }}
+{{- define "neves.commonLabels" -}}
+app.kubernetes.io/name: {{ .Values.teamName | quote}}
+helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | quote}}
+app.kubernetes.io/managed-by: Helm
 app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/part-of: {{ .Chart.Name | quote}}
+app.kubernetes.io/component: {{ .component | quote }}
+app: {{ include "neves.name.app" . | quote}}
+{{- end -}}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "HelmGas.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "HelmGas.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
+{{- define "neves.name.deploy" -}}
+{{- printf "%s-deploy" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.svc" -}}
+{{- printf "%s-svc" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.container" -}}
+{{- printf "%s-container" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.configmap" -}}
+{{- printf "%s-configmap" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.secret" -}}
+{{- printf "%s-secret" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.gw" -}}
+{{- printf "%s-gw" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.pvc" -}}
+{{- printf "%s-pvc" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.pv" -}}
+{{- printf "%s-pv" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.httproute" -}}
+{{- printf "%s-httproute" (include "neves.app.name" .) -}}
+{{- end -}}
+
+{{- define "neves.name.serviceentry" -}}
+{{- printf "%s-external" . -}}
+{{- end -}}
+
+{{- define "neves.name.auth" -}}
+{{- printf "%s-auth" . -}}
+{{- end -}}
