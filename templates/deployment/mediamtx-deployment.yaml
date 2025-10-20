@@ -1,40 +1,14 @@
-# deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
+{{- $ := .Values.mediamtxServer -}}
+{{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
+
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: mediamtx-server-deployment
-  namespace: neves
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mediamtx-server
-  template:
-    metadata:
-      labels:
-        app: mediamtx-server
-    spec:
-      containers:
-      - name: mediamtx-server-container
-        image: bluenviron/mediamtx:latest
-        ports:
-        - name: srt-port
-          containerPort: 8890
-          protocol: UDP
-        - name: api-port
-          containerPort: 9997
-          protocol: TCP
-        volumeMounts:
-          - name: config-volume
-            mountPath: /mediamtx.yml
-            subPath: mediamtx.yml
-          - name: shared-efs-storage
-            mountPath: /recordings
-      volumes:
-        - name: config-volume
-          configMap:
-            name: mediamtx-server-config
-        - name: shared-efs-storage
-          persistentVolumeClaim:
-            claimName: efs-shared-pvc
+  name: {{ include "neves.name.configmap" $context }}
+  namespace: {{ .Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+data:
+  mediamtx.yml: |
+    {{- tpl .Values.mediamtxServer.config . | nindent 4 }}
 
