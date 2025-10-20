@@ -1,40 +1,48 @@
-# deployment.yaml
+{{- $ := .Values.mediamtxServer -}}
+{{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mediamtx-server-deployment
-  namespace: neves
+  name: {{ include "neves.name.deploy" $context }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ $.replicaCount }}
   selector:
     matchLabels:
-      app: mediamtx-server
+      app: {{ include "neves.name.app" $context | quote }}
   template:
     metadata:
       labels:
-        app: mediamtx-server
+        {{- include "neves.commonLabels" $context | nindent 8 }}
     spec:
       containers:
-      - name: mediamtx-server-container
-        image: bluenviron/mediamtx:latest
+      - name: {{ include "neves.name.container" $context }}
+        image: "{{ $.image.repository }}:{{ $.image.tag }}"
+        imagePullPolicy: {{ $.image.pullPolicy }}
         ports:
         - name: srt-port
-          containerPort: 8890
+          containerPort: {{ $.containerPorts.srt }}
           protocol: UDP
         - name: api-port
-          containerPort: 9997
+          containerPort: {{ $.containerPorts.api }}
           protocol: TCP
         volumeMounts:
           - name: config-volume
             mountPath: /mediamtx.yml
             subPath: mediamtx.yml
-          - name: shared-efs-storage
-            mountPath: /recordings
+          {{- if $.persistence.enabled }}
+          - name: {{ $.persistence.volumeName }}
+            mountPath: {{ $.persistence.mountPath }}
+          {{- end }}
       volumes:
         - name: config-volume
           configMap:
-            name: mediamtx-server-config
-        - name: shared-efs-storage
+            name: {{ include "neves.name.configmap" $context }}
+        {{- if $.persistence.enabled }}
+        - name: {{ $.persistence.volumeName }}
           persistentVolumeClaim:
-            claimName: efs-shared-pvc
-
+            claimName: {{ $.persistence.existingClaim }}
+        {{- end }}

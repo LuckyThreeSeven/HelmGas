@@ -1,23 +1,27 @@
+{{- $ := .Values.mediamtxServer -}}
+{{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
+
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "neves.name.svc" $context }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+  {{- with $.service.annotations }}
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "9997"
-    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
-    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-    service.beta.kubernetes.io/aws-load-balancer-name: streaming-lb
-  name: mediamtx-server-service
-  namespace: neves
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
+  type: {{ $.service.type }}
   ports:
-  - name: api-tcp
-    port: 9997
-    protocol: TCP
-    targetPort: 9997
-  - name: srt-udp
-    port: 8890
-    protocol: UDP
-    targetPort: 8890
+    - name: api-tcp
+      port: {{ $.service.ports.api.port }}
+      protocol: {{ $.service.ports.api.protocol }}
+      targetPort: {{ $.service.ports.api.targetPort }}
+    - name: srt-udp
+      port: {{ $.service.ports.srt.port }}
+      protocol: {{ $.service.ports.srt.protocol }}
+      targetPort: {{ $.service.ports.srt.targetPort }}
   selector:
-    app: mediamtx-server
-  type: LoadBalancer
+    app: {{ include "neves.name.app" $context | quote }}
