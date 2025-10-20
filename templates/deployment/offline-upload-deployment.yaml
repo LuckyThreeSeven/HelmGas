@@ -5,7 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "neves.name.deploy" $context }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.teamName }}
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 spec:
@@ -16,7 +16,6 @@ spec:
   template:
     metadata:
       labels:
-        {{- /* 파드 레벨의 레이블은 들여쓰기가 더 필요합니다. */}}
         {{- include "neves.commonLabels" $context | nindent 8 }}
     spec:
       containers:
@@ -28,16 +27,11 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "neves.name.configmap" $context }}
-        {{- if $.persistence.enabled }}
         volumeMounts:
           - name: {{ $.persistence.volumeName }}
             mountPath: {{ $.persistence.mountPath }}
-        {{- end }}
-      {{- /* 'volumes' 섹션은 'containers'와 동일한 레벨에 있어야 합니다. */}}
-      {{- if $.persistence.enabled }}
       volumes:
         - name: {{ $.persistence.volumeName }}
           persistentVolumeClaim:
             claimName: {{ $.persistence.existingClaim }}
-      {{- end }}
 
