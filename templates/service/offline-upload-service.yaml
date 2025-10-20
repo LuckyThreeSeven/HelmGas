@@ -1,15 +1,20 @@
+{{- $ := .Values.offlineUploadServer -}}
+{{- $context := merge (dict "appName" $.appName "component" $.appName) . -}}
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: offline-upload-server-service
-  namespace: neves
+  name: {{ include "neves.name.svc" $context }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
 spec:
-  selector:
-    app: offline-upload-server
-  type: ClusterIP
+  type: {{ $.service.type }}
   ports:
-  - name: http
-    protocol: TCP
-    port: 8001
-    targetPort: 8000
+    - port: {{ $.service.port }}
+      targetPort: {{ $.service.containerPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "neves.name.app" $context | quote }}
 
