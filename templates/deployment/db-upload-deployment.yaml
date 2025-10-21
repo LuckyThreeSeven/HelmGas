@@ -1,0 +1,34 @@
+{{ $context := merge (dict "app" $.Values.dbUploadServer) . -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "neves.name.deploy" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{ include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  replicas: {{ $context.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "neves.name.app" $context }}
+  template:
+    metadata:
+      labels:
+        {{- include "neves.commonLabels" $context | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "neves.name.container" $context }}
+          image: {{ include "neves.url.image" $context }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "neves.name.configmap" $context }}
+            - secretRef:
+                name: {{ include "neves.name.secret" $context }}
+          volumeMounts:
+          - name: shared-efs-storage
+            mountPath: {{ $.Values.efs.mountPath }}
+      volumes:
+        - name: shared-efs-storage
+          persistentVolumeClaim:
+            claimName: {{ include "neves.name.pvc" $.Values.efs.name }}
