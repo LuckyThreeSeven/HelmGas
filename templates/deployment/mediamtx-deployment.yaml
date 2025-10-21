@@ -23,7 +23,7 @@ spec:
         ports:
 {{- range $port := $context.app.port }}
         - containerPort: {{ $port.container }}
-          porotocol: {{ $port.protocol }}
+          protocol: {{ $port.protocol }}
 {{- end }}
         volumeMounts:
           - name: config-volume

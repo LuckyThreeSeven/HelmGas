@@ -1,5 +1,5 @@
 {{- $context := merge (dict "app" $.Values.statusServer) . -}}
-{{- $mailApp :=  merge (dict "app" $.Values.statusServer) . -}}
+{{- $mailApp :=  merge (dict "app" $.Values.mailServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
@@ -14,5 +14,5 @@ data:
   RDB_DRIVER_CLASS: {{ .db.driver | quote }}
   DB_DDL: {{ .db.ddl | quote }}
   DISCONNECTED_CRON: {{ .disconnectedCron | quote }}
-  MAIL_SERVICE_URL: {{ include "neves.url.svc" $mailApp }}
+  MAIL_SERVICE_URL: {{ include "neves.url.svc" $mailApp | quote  }}
 {{ end -}}

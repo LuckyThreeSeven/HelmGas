@@ -10,7 +10,7 @@ metadata:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 data:
   {{- with $.Values.dbUploadServer.config }}
-  AWS_DEFAULT_REGION: {{ .aws.region }}
-  S3_BUCKET_NAME: {{ .aws.s3.bucket}}
-  STATUS_SERVER_URL: {{ include "neves.url.svc" $statusApp }}
+  AWS_DEFAULT_REGION: {{ .aws.region | quote }}
+  S3_BUCKET_NAME: {{ .aws.s3.bucket | quote  }}
+  STATUS_SERVER_URL: {{ include "neves.url.svc" $statusApp | quote }}
   {{ end -}}

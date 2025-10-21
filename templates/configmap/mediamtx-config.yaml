@@ -1,4 +1,4 @@
-{{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{- $context := merge (dict "app" $.Values.mediamtxServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
