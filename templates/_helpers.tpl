@@ -1,5 +1,5 @@
 {{- define "neves.name.app" -}}
-{{- .appName | printf "%s-app" | trunc 63 | trimSuffix "-" -}}
+{{- .app.name | printf "%s" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "neves.commonLabels" -}}
@@ -8,8 +8,18 @@ helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | 
 app.kubernetes.io/managed-by: Helm
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-app.kubernetes.io/part-of: {{ .Chart.Name | quote}}
-app: {{ include "neves.name.app" . | quote}}
+app.kubernetes.io/part-of: {{ .Chart.Name | quote }}
+app: {{ include "neves.name.app" . | quote }}
+
+{{- end -}}
+
+{{- define "neves.url.svc" -}}
+{{- printf "%s.%s.svc.cluster.local" .app.name .Values.teamName -}}
+{{- end -}}
+
+{{- define "neves.url.image" }}
+{{- $image := merge .app.image (dict "root" .Values.image.root) -}}
+{{- printf "%s/%s:%s" $image.root $image.repo $image.tag }}
 {{- end -}}
 
 {{- define "neves.name.deploy" -}}
@@ -33,19 +43,19 @@ app: {{ include "neves.name.app" . | quote}}
 {{- end -}}
 
 {{- define "neves.name.gw" -}}
-{{- printf "%s-gw" (include "neves.name.app" .) -}}
+{{- printf "%s-gw" . -}}
 {{- end -}}
 
 {{- define "neves.name.pvc" -}}
-{{- printf "%s-pvc" (include "neves.name.app" .) -}}
+{{- printf "%s-pvc" . -}}
 {{- end -}}
 
 {{- define "neves.name.pv" -}}
-{{- printf "%s-pv" (include "neves.name.app" .) -}}
+{{- printf "%s-pv" . -}}
 {{- end -}}
 
 {{- define "neves.name.httproute" -}}
-{{- printf "%s-httproute" (include "neves.name.app" .) -}}
+{{- printf "%s-httproute" . -}}
 {{- end -}}
 
 {{- define "neves.name.serviceentry" -}}
