@@ -1,7 +1,5 @@
-# status-configmap.yaml
-{{ $context := merge (dict "appName" $.Values.statusServer.name) . -}}
-{{ $mailApp := (dict "appName" $.Values.mailServer.name) }}
-{{- $mailSvc := (include "neves.name.svc" $mailApp) -}}
+{{- $context := merge (dict "app" $.Values.statusServer) . -}}
+{{- $mailApp :=  merge (dict "app" $.Values.statusServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
@@ -16,5 +14,5 @@ data:
   RDB_DRIVER_CLASS: {{ .db.driver | quote }}
   DB_DDL: {{ .db.ddl | quote }}
   DISCONNECTED_CRON: {{ .disconnectedCron | quote }}
-  MAIL_SERVICE_URL: {{ printf "%s.%s.svc.cluster.local" $mailSvc $.Values.teamName | quote }}
+  MAIL_SERVICE_URL: {{ include "neves.url.svc" $mailApp }}
 {{ end -}}

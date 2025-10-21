@@ -1,0 +1,12 @@
+{{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{- $userApp :=  merge (dict "app" $.Values.userServer) . -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "neves.name.configmap" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+data:
+  USER_SERVER_URL: {{ include "neves.url.svc" $userApp }}
