@@ -1,0 +1,16 @@
+{{- $context := merge (dict "app" $.Values.dbUploadServer) . -}}
+{{- $statusApp := merge (dict "app" $.Values.statusServer) . -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "neves.name.configmap" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+data:
+  {{- with $.Values.dbUploadServer.config }}
+  AWS_DEFAULT_REGION: {{ .aws.region }}
+  S3_BUCKET_NAME: {{ .aws.s3.bucket}}
+  STATUS_SERVER_URL: {{ include "neves.url.svc" $statusApp }}
+  {{ end -}}

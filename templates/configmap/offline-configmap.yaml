@@ -1,0 +1,11 @@
+{{- $context := merge (dict "app" $.Values.offlineServer) . -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "neves.name.configmap" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+data:
+  CONTAINER_DATA_PATH: "/recordings"
