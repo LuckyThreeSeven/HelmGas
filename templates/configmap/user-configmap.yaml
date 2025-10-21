@@ -13,6 +13,6 @@ data:
   DB_HOST: {{ .db.host }}
   DB_NAME: {{ .db.name }}
   DB_PORT: {{ .db.port }}
-  MAIL_API_URL: {{ include "neves.url.svc" $mailApp }}
+  MAIL_API_URL: {{ printf "http://%s" (include "neves.url.svc" $mailApp) }}
   CORS_ALLOWED_ORIGINS: {{ .corsAllowedOrigins }}
 {{ end }}

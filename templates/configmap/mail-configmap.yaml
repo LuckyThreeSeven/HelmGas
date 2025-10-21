@@ -9,4 +9,4 @@ metadata:
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 data:
-  USER_SERVER_URL: {{ include "neves.url.svc" $userApp }}
+  USER_SERVER_URL: {{ printf "http://%s" (include "neves.url.svc" $userApp) }}
