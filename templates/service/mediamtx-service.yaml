@@ -16,8 +16,9 @@ spec:
     app: {{ include "neves.name.app" $context }}
   type: LoadBalancer
   ports:
-{{- range $port := $context.app.port }}
+{{- range $name, $port := $context.app.port }}
     - protocol: {{ $port.protocol }}
       port: {{ $port.service }}
       targetPort: {{ $port.container }}
+      name: {{ $name }}
 {{ end }}
