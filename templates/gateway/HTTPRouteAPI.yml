@@ -1,0 +1,41 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api-route
+  namespace: {{ $.Values.teamName }}
+spec:
+  hostnames:
+    - {{ printf "api.%s" $.Values.gateway.rootDomain }}
+  parentRefs:
+    - name: {{ include "neves.name.gw" $.Values.gateway.name }}
+      namespace: {{ $.Values.teamName }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /status
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: {{ include "neves.name.svc" $.Values.statusServer }}
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /users
+      backendRefs:
+        - name: {{ include "neves.name.svc" $.Values.userServer }}
+          port: 80
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /videos
+      backendRefs:
+        - name: {{ include "neves.name.svc" $.Values.playServer }}
+          port: 80

@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mnt-route
+  namespace: istio-system
+spec:
+  hostnames:
+    - {{ printf "mnt.%s" $.Values.gateway.rootDomain }}
+  parentRefs:
+    - name: {{ include "neves.name.gw" $.Values.gateway.name }}
+      namespace: {{ $.Values.teamName }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ $.Values.monitoring.kiali.path }}
+      backendRefs:
+        - name: kiali
+          port: {{ $.Values.monitoring.kiali.port }}
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ $.Values.monitoring.grafana.path }}
+      backendRefs:
+        - name: grafana
+          port: {{ $.Values.monitoring.grafana.port }}

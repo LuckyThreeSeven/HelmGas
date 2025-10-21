@@ -1,0 +1,15 @@
+# persistent-volume.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "neves.name.pv" $.Values.efs.name }}
+spec:
+  capacity:
+    storage: {{ $.Values.efs.storage }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: {{ $.Values.efs.fileId }}

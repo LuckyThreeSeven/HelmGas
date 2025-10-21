@@ -29,12 +29,12 @@ spec:
           - name: config-volume
             mountPath: /mediamtx.yml
             subPath: mediamtx.yml
-          - name: shared-efs-storage
+          - name: {{ include "neves.name.volume" $.Values.efs.name }}
             mountPath: {{ $.Values.efs.mountPath }}
       volumes:
         - name: config-volume
           configMap:
             name: {{ include "neves.name.configmap" $context }}
-        - name: shared-efs-storage
+        - name: {{ include "neves.name.volume" $.Values.efs.name }}
           persistentVolumeClaim:
             claimName: {{ include "neves.name.pvc" $.Values.efs.name }}

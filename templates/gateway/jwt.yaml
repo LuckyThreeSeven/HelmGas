@@ -1,0 +1,16 @@
+{{ $userApp := merge (dict "app" $.Values.userServer) . -}}
+
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-authentication
+spec:
+  selector:
+    matchLabels:
+      jwt: first
+  jwtRules:
+    - issuer: "neves.com"
+      forwardOriginalToken: true
+      jwkUri: {{ printf "http://%s/users/.well-known/jwks.json" (include "neves.url.svc" userApp) }}
+      fromHeaders:
+        - name: "WWW-Authorization"

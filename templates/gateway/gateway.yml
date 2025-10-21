@@ -1,0 +1,52 @@
+{{ $context := . -}}
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "neves.name.gw" $.Values.gateway.name }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+    jwt: first
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-name: {{ printf "%s-lb" $.Values.gateway.name }}
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ $.Values.gateway.sshArn }}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+  namespace: neves
+
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: neves-http
+      hostname: {{ printf "api.%s" $.Values.gateway.rootDomain }}
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: neves-https
+      hostname: {{ printf "api.%s" $.Values.gateway.rootDomain }}
+      port: 443
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: monitoring-http
+      hostname: {{ printf "mnt.%s" $.Values.gateway.rootDomain }}
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: monitoring-https
+      hostname: {{ printf "mnt.%s" $.Values.gateway.rootDomain }}
+      port: 443
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
