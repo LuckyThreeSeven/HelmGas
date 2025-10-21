@@ -1,0 +1,14 @@
+# persistent-volume-claim.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "neves.name.pvc" $.Values.efs.name }}
+  namespace: {{ $.Values.teamName }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: {{ $.Values.efs.storage }}
+  volumeName: {{ include "neves.name.pv" $.Values.efs.name }}

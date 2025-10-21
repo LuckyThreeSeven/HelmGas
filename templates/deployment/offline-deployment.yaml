@@ -1,4 +1,4 @@
-{{ $context := merge (dict "app" $.Values.dbUploadServer) . -}}
+{{ $context := merge (dict "app" $.Values.offlineServer) . -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -18,17 +18,17 @@ spec:
         {{- include "neves.commonLabels" $context | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "neves.name.container" $context }}
-          image: {{ include "neves.url.image" $context }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "neves.name.configmap" $context }}
-            - secretRef:
-                name: {{ include "neves.name.secret" $context }}
-          volumeMounts:
-          - name: shared-efs-storage
+      - name: {{ include "neves.name.container" $context }}
+        image: {{ include "neves.url.image" $context }}
+        ports:
+        - containerPort: {{ $context.app.port.container }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "neves.name.configmap" $context }}
+        volumeMounts:
+          - name: {{ include "neves.name.pv" $.Values.efs.name }}
             mountPath: {{ $.Values.efs.mountPath }}
       volumes:
-        - name: shared-efs-storage
+        - name: {{ include "neves.name.pv" $.Values.efs.name }}
           persistentVolumeClaim:
             claimName: {{ include "neves.name.pvc" $.Values.efs.name }}

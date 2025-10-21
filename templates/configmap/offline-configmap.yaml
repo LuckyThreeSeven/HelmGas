@@ -1,4 +1,4 @@
-{{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{- $context := merge (dict "app" $.Values.offlineServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
@@ -8,5 +8,4 @@ metadata:
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 data:
-  mediamtx.yml: |
-{{ $.Values.mediamtxServer.config.mediamtxYaml | indent 4 }}
+  CONTAINER_DATA_PATH: "/recordings"

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mail-server-config
-  namespace: {{ .Values.teamName }}
-  labels:
-    app: mail-server
-data:
-  USER_SERVER_URL: {{ .Values.userServer.url }}

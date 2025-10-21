@@ -1,4 +1,5 @@
 {{- $context := merge (dict "app" $.Values.mailServer) . -}}
+{{- $userApp :=  merge (dict "app" $.Values.userServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
@@ -8,5 +9,4 @@ metadata:
   labels:
     {{- include "neves.commonLabels" $context | nindent 4 }}
 data:
-  mediamtx.yml: |
-{{ $.Values.mediamtxServer.config.mediamtxYaml | indent 4 }}
+  USER_SERVER_URL: {{ include "neves.url.svc" $userApp }}
