@@ -1,5 +1,5 @@
 {{- $context := merge (dict "app" $.Values.userServer) . -}}
-{{- $mailApp :=  merge (dict "app" $.Values.statusServer) . -}}
+{{- $mailApp :=  merge (dict "app" $.Values.mailServer) . -}}
 
 apiVersion: v1
 kind: ConfigMap
