@@ -12,5 +12,5 @@ data:
   {{- with $.Values.dbUploadServer.config }}
   AWS_DEFAULT_REGION: {{ .aws.region | quote }}
   S3_BUCKET_NAME: {{ .aws.s3.bucket | quote  }}
-  STATUS_SERVER_URL: {{ include "neves.url.svc" $statusApp | quote }}
+  STATUS_SERVER_URL: {{ printf "http://%s/metadata" (include "neves.url.svc" $statusApp) | quote }}
   {{ end -}}
