@@ -24,6 +24,13 @@ spec:
             path:
               type: ReplacePrefixMatch
               replacePrefixMatch: /
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            add:
+              - name: X-Forwarded-Prefix
+                value: /status
+              - name: X-Forwarded-Host
+                value: {{ printf "api.%s" $.Values.gateway.rootDomain }}
       backendRefs:
         - name: {{ include "neves.name.svc" $statusApp }}
           port: 80

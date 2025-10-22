@@ -14,7 +14,7 @@ app: {{ include "neves.name.app" . | quote }}
 {{- end -}}
 
 {{- define "neves.url.svc" -}}
-{{- printf "%s.%s.svc.cluster.local" .app.name .Values.teamName -}}
+{{- printf "%s.%s.svc.cluster.local" (include "neves.name.svc" .) .Values.teamName -}}
 {{- end -}}
 
 {{- define "neves.url.image" }}
