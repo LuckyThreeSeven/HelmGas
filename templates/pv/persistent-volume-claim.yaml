@@ -11,4 +11,3 @@ spec:
   resources:
     requests:
       storage: {{ $.Values.efs.storage }}
-  volumeName: {{ include "neves.name.pv" $.Values.efs.name }}
