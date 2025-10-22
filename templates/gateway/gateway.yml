@@ -41,7 +41,7 @@ spec:
       protocol: HTTP
       allowedRoutes:
         namespaces:
-          from: Same
+          from: All
 
     - name: monitoring-https
       hostname: {{ printf "mnt.%s" $.Values.gateway.rootDomain }}
@@ -49,4 +49,4 @@ spec:
       protocol: HTTP
       allowedRoutes:
         namespaces:
-          from: Same
+          from: All
