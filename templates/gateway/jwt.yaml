@@ -13,4 +13,4 @@ spec:
       forwardOriginalToken: true
       jwksUri: {{ printf "http://%s/users/.well-known/jwks.json" (include "neves.url.svc" $userApp) }}
       fromHeaders:
-        - name: "WWW-Authorization"
+        - name: "Www-Authorization"
