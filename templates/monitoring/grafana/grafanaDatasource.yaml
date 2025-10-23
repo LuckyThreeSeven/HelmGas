@@ -1,0 +1,20 @@
+{{- $prometheusUrl := (printf "%s.%s.svc.cluster.local" $.Values.monitoring.prometheus.name $.Values.monitoring.namespace) -}}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: grafana-datasource
+  namespace: {{ .Values.monitoring.namespace }}
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana: neves
+  allowCrossNamespaceImport: true
+  datasource:
+    name: KubePrometheus
+    type: prometheus
+    access: proxy
+    isDefault: true
+    url: {{ printf "http://%s:%v" $prometheusUrl $.Values.monitoring.prometheus.port }}
+    jsonData:
+      timeInterval: 5s
+      tlsSkipVerify: true
