@@ -1,0 +1,22 @@
+{{ $context := merge (dict "app" $.Values.statusServer) . -}}
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "neves.name.svc" $context }}-monitor
+  namespace: {{ $.Values.teamName }}
+  labels:
+    release: prometheus
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ $.Values.teamName }}
+  selector:
+    matchLabels:
+      app: {{ include "neves.name.app" $context }}
+  endpoints:
+    - port: basic
+      path: /prom/prometheus
+      interval: 15s
+      scrapeTimeout: 10s
