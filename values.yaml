@@ -1,41 +1,166 @@
 teamName: neves
 
-url:
-  domain:
-    root: neves-box.com
-    apiPrefix: api
-    monitoringPrefix: mnt
+gateway:
+  name: neves
+  sshArn: # ssl arn
+  rootDomain: # domain 이름
 
 image:
-  root: public.ecr.aws/k8s0f8l3/neves/
+  root: # default image repository address => ex) image.root/repo:tag
 
-statusServer:
-  name: status
+monitoring:
+  namespace: monitoring
+  prometheus:
+    name: prometheus-kube-prometheus-prometheus
+    port: 9090
+  kiali:
+    name: kiali
+    path: "/kiali"
+    port: 20001
+  grafana:
+    name: grafana
+    path: "/grafana"
+    port: 3000
+    user: # grafana id
+    password: # grafana pw
+
+efs:
+  name: efs
+  storage: 20Gi
+  mountPath: /recordings
+  storageClassName: # Setting values ​​when creating efs
+
+mediamtxServer:
+  name: "mediamtx"
+  replicas: "2"
   image:
-    repo: status-service
-    tag: latest
+    root: "bluenviron"
+    repo: mediamtx
+    tag: "latest"
+  port:
+    srt:
+      container: 8890
+      service: 8890
+      protocol: UDP
+    api:
+      container: 9997
+      service: 9997
+      protocol: TCP
   config:
-    db:
-      url: ...
+    mediamtxYaml: |
+      srt: yes
+      srtAddress: :8890
+      api: yes
+      apiAddress: :9997
+      pathDefaults:
+      paths:
+        '~^.*$':
+          source: publisher
+          record: yes
+          recordPath: ./recordings/%path/%Y%m%d-%H%M%S
+          recordFormat: fmp4
+          recordPartDuration: 30s
+          recordSegmentDuration: 30s
+          recordDeleteAfter: 24h
+
+offlineServer:
+  name: "offline"
+  replicas: "2"
+  port:
+    service: 8001
+    container: 8000
+  image:
+    repo: offline-upload-server
+    tag: "chore-nvs"
 
 dbUploadServer:
-  name: db-upload
+  name: "db-upload"
+  replicas: "2"
   image:
     repo: db-upload-server
     tag: dev
-    pullPolicy: IfNotPresent
-  replicas: 1
-  ports:
-    http: 8080
   config:
     aws:
-      defaultRegion: ap-northeast-2
-      s3BucketName: neves-video-bucket
+      region: "ap-northeast-2"
+      s3:
+        bucket: "neves-video-bucket"
   secret:
-    awsAccessKeyId: "a"
-    awsSecretAccessKey: "b"
-  persistence:
-    enabled: true
-    name: shared-efs-storage
-    mountPath: /recordings
-    existingClaim: efs-shared-pvc
+    aws:
+      accessKeyId: # aws access id
+      secretAccessKey: # aws secret key
+
+statusServer:
+  name: status
+  replicas: "2"
+  image:
+    repo: status-service
+    tag: latest
+  port:
+    container: 8080
+  config:
+    db:
+      driver: "org.postgresql.Driver"
+      ddl: "update"
+      url: # db url
+      name: # db name
+    disconnectedCron: "0 0 * * * *"
+  secret:
+    db:
+      username: # db username
+      password: # db password
+
+userServer:
+  name: "user"
+  replicas: "2"
+  image:
+    repo: "user_server"
+    tag: "latest"
+  port:
+    container: 8000
+  config:
+    db:
+      host: # db url
+      name: # db name
+      port: # db port
+    corsAllowedOrigins: # corss for frontend url ex) "https://neves-box.com"
+  secret:
+    db:
+      username: # db username
+      password: # db password
+    privateKey: |
+# rsa private key for jwt
+    publicKey: |
+# rsa public key for jwt
+
+
+mailServer:
+  name: "mail"
+  replicas: "2"
+  image:
+    repo: "mail_server"
+    tag: "latest"
+  port:
+    container: 8000
+  secret:
+    gmail:
+      user: # gmail email
+      password: # gmail app password
+
+playServer:
+  name: "play"
+  replicas: "2"
+  image:
+    repo: "play_server"
+    tag: "latest"
+  port:
+    container: 8000
+  config:
+    cloudFront:
+      domain: # clientfront domain
+      expireTime: "1"
+    corsAllowedOrigins: # cors for forntend url ex) '["https://neves-box.com"]'
+  secret:
+    s3:
+      keyPairId: # s3 key
+      privateKey: |
+# s3 private key
