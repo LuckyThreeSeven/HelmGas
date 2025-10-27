@@ -12,7 +12,7 @@ metadata:
 data:
   RDB_URL: {{ printf "jdbc:%s/%s" .db.url .db.name | quote }}
   RDB_DRIVER_CLASS: {{ .db.driver | quote }}
-  DB_DDL: {{ .db.ddl | quote }}
+  RDB_DDL: {{ .db.ddl | quote }}
   DISCONNECTED_CRON: {{ .disconnectedCron | quote }}
   MAIL_SERVICE_URL: {{ include "neves.url.svc" $mailApp | quote  }}
 {{ end -}}
