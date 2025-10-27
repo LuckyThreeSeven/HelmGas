@@ -57,7 +57,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracing
+  name: {{ .Values.monitoring.jaeger.name }}
   namespace: istio-system
   labels:
     app: jaeger
@@ -65,7 +65,7 @@ spec:
   type: ClusterIP
   ports:
     - name: http-query
-      port: 80
+      port: {{ .Values.monitoring.jaeger.port }}
       protocol: TCP
       targetPort: 16686
     # Note: Change port name if you add '--query.grpc.tls.enabled=true'

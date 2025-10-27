@@ -26,3 +26,12 @@ spec:
       backendRefs:
         - name: {{ printf "%s-service" $.Values.monitoring.grafana.name }}
           port: {{ $.Values.monitoring.grafana.port }}
+
+    - matches:
+        - path:
+            type: PathPrefix
+            value: {{ $.Values.monitoring.jaeger.path }}
+      backendRefs:
+        - name: {{ $.Values.monitoring.jaeger.name }}
+          namespace: istio-system
+          port: {{ $.Values.monitoring.jaeger.port }}
