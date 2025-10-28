@@ -6,7 +6,7 @@ metadata:
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
-  project: neves-proj          # Argo CD Project (변경 가능)
+  project: default         # Argo CD Project (변경 가능)
 
   source:
     repoURL: https://github.com/LuckyThreeSeven/HelmGas # ⚠️ 실제 Git Repository URL로 변경하세요
