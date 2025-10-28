@@ -40,7 +40,7 @@ mediamtxServer:
   image:
     root: "bluenviron"
     repo: mediamtx
-    tag: "latest"
+    tag: "latest-ffmpeg"
   port:
     srt:
       container: 8890
@@ -72,6 +72,8 @@ mediamtxServer:
           recordPartDuration: 30s
           recordSegmentDuration: 30s
           recordDeleteAfter: 24h
+          runOnRecordSegmentComplete: |
+            echo "MTX_PATH: ${MTX_PATH}, MTX_SEGMENT_PATH: ${MTX_SEGMENT_PATH}, MTX_SEGMENT_DURATION: ${MTX_SEGMENT_DURATION}"
       authInternalUsers:
       - user: any
         pass:
@@ -80,6 +82,8 @@ mediamtxServer:
         - action: metrics
           path:
         - action: publish
+          path:
+        - action: api
           path:
 
 
