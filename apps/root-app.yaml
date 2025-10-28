@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/LuckyThreeSeven/HelmGas
+    repoURL: https://github.com/LuckyThreeSeven/HelmGas/tree/argocd-test
     targetRevision: HEAD
     path: apps
   destination:
