@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: external-postgres-db
+  namespace: default
 spec:
   hosts:
   - "neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
@@ -16,6 +17,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: external-gmail-smtp
+  namespace: default
 spec:
   hosts:
   - "smtp.gmail.com"
@@ -30,6 +32,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: external-s3
+  namespace: default
 spec:
   hosts:
   - "neves-video-bucket.s3.ap-northeast-2.amazonaws.com"
