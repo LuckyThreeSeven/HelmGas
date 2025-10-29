@@ -98,9 +98,12 @@ offlineServer:
 dbUploadServer:
   name: "db-upload"
   replicas: "1"
+  service:
+    port: 8000
+    portName: http-metrics
   image:
-    repo: db-upload-server
-    tag: dev
+    repo: himinqq #TODO: db-upload-server
+    tag:  latest #TODO: dev
   config:
     aws:
       region: "ap-northeast-2"
