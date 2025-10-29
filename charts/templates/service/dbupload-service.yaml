@@ -1,0 +1,17 @@
+{{ $context := merge (dict "app" $.Values.dbUploadServer) . -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "neves.name.svc" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    app: {{ include "neves.name.app" $context }} 
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "neves.name.app" $context }}
+  ports:
+    - name: {{ $.Values.dbUploadServer.service.portName }} 
+      port: {{ $.Values.dbUploadServer.service.port }}      
+      targetPort: {{ $.Values.dbUploadServer.service.port }} 
