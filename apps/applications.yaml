@@ -15,11 +15,13 @@ spec:
       releaseName: neves-app
       valueFiles:
       - values.yaml
-      
+
   destination:
     server: https://kubernetes.default.svc
 
   syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true
