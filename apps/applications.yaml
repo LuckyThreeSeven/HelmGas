@@ -5,10 +5,45 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: |
+      offline=public.ecr.aws/k8s0f8l3/neves/offline-upload-server,
+      dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server,
+      status=public.ecr.aws/k8s0f8l3/neves/status-service,
+      user=public.ecr.aws/k8s0f8l3/neves/user_server,
+      mail=public.ecr.aws/k8s0f8l3/neves/mail_server,
+      play=public.ecr.aws/k8s0f8l3/neves/play_server
+
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+
+    argocd-image-updater.argoproj.io/offline.update-strategy: latest
+    argocd-image-updater.argoproj.io/offline.helm.image-tag: |
+      {{ .Values.offlineServer.image.tag }}
+
+    argocd-image-updater.argoproj.io/dbupload.update-strategy: latest
+    argocd-image-updater.argoproj.io/dbupload.helm.image-tag: |
+      {{ .Values.dbUploadServer.image.tag }}
+
+    argocd-image-updater.argoproj.io/status.update-strategy: latest
+    argocd-image-updater.argoproj.io/status.helm.image-tag: |
+      {{ .Values.statusServer.image.tag }}
+
+    argocd-image-updater.argoproj.io/user.update-strategy: latest
+    argocd-image-updater.argoproj.io/user.helm.image-tag: |
+      {{ .Values.userServer.image.tag }}
+
+    argocd-image-updater.argoproj.io/mail.update-strategy: latest
+    argocd-image-updater.argoproj.io/mail.helm.image-tag: |
+      {{ .Values.mailServer.image.tag }}
+
+    argocd-image-updater.argoproj.io/play.update-strategy: latest
+    argocd-image-updater.argoproj.io/play.helm.image-tag: |
+      {{ .Values.playServer.image.tag }}
+      
 spec:
   project: default
   source:
-    repoURL: https://github.com/LuckyThreeSeven/HelmGas
+    repoURL: ssh://git@github.com/LuckyThreeSeven/HelmGas.git
     targetRevision: main
     path: charts
     helm:

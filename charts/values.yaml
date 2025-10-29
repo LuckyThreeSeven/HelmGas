@@ -115,7 +115,7 @@ statusServer:
   replicas: "1"
   image:
     repo: status-service
-    tag: latest
+    tag: 4abe68becdeb989068a5e0c40a009793330d2a0a
   port:
     container: 8080
   config:
@@ -131,7 +131,7 @@ userServer:
   replicas: "1"
   image:
     repo: "user_server"
-    tag: "latest"
+    tag: "4e05b1cdb37a4d3a9b13c9a0506df596164dde57"
   port:
     container: 8000
   config:
@@ -146,7 +146,7 @@ mailServer:
   replicas: "1"
   image:
     repo: "mail_server"
-    tag: "latest"
+    tag: "682fed9da3b2c92a0b682666f0bc68ff5dd50a19"
   port:
     container: 8000
 
@@ -155,7 +155,7 @@ playServer:
   replicas: "1"
   image:
     repo: "play_server"
-    tag: "latest"
+    tag: "682fed9da3b2c92a0b682666f0bc68ff5dd50a19"
   port:
     container: 8000
   config:
