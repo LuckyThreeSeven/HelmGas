@@ -7,11 +7,11 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd-image-updater.argoproj.io/image-list: |
-      offline=public.ecr.aws/k8s0f8l3/neves/offline-upload-server,
-      dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server,
-      status=public.ecr.aws/k8s0f8l3/neves/status-service,
-      user=public.ecr.aws/k8s0f8l3/neves/user_server,
-      mail=public.ecr.aws/k8s0f8l3/neves/mail_server,
+      offline=public.ecr.aws/k8s0f8l3/neves/offline-upload-server
+      dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server
+      status=public.ecr.aws/k8s0f8l3/neves/status-service
+      user=public.ecr.aws/k8s0f8l3/neves/user_server
+      mail=public.ecr.aws/k8s0f8l3/neves/mail_server
       play=public.ecr.aws/k8s0f8l3/neves/play_server
 
     argocd-image-updater.argoproj.io/write-back-method: argocd
