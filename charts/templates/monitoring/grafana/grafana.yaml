@@ -11,9 +11,6 @@ spec:
       mode: "console"
     auth:
       disable_login_form: "false"
-    security:
-      admin_user: {{ .Values.monitoring.grafana.user }}
-      admin_password: {{ .Values.monitoring.grafana.password }}
     server:
       root_url: {{ printf "https://mnt.%s%s" $.Values.gateway.rootDomain $.Values.monitoring.grafana.path}}
       serve_from_sub_path: "true"

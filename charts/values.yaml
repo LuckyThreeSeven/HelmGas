@@ -21,8 +21,6 @@ monitoring:
     name: grafana
     path: "/grafana"
     port: 3000
-    user: admin
-    password: admin123
   jaeger:
     name: jaeger
     path: "/jaeger"
