@@ -102,8 +102,8 @@ dbUploadServer:
     port: 8000
     portName: http-metrics
   image:
-    repo: himinqq #TODO: db-upload-server
-    tag:  latest #TODO: dev
+    repo: db-upload-server
+    tag: dev
   config:
     aws:
       region: "ap-northeast-2"
