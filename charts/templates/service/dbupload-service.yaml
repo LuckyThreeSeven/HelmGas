@@ -14,8 +14,4 @@ spec:
   ports:
     - name: {{ $.Values.dbUploadServer.service.portName }} 
       port: {{ $.Values.dbUploadServer.service.port }}      
-<<<<<<< HEAD:charts/templates/service/dbupload-service.yaml
       targetPort: {{ $.Values.dbUploadServer.service.port }} 
-=======
-      targetPort: {{ $.Values.dbUploadServer.service.port }} 
->>>>>>> main:templates/service/dbupload-service.yaml
