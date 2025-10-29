@@ -2,11 +2,11 @@ teamName: neves
 
 gateway:
   name: neves
-  sshArn: # ssl arn
-  rootDomain: # domain 이름
+  sshArn: "arn:aws:acm:ap-northeast-2:622703417916:certificate/d14d598b-3399-4180-9c8e-f9fb009f3075"
+  rootDomain: neves-box.com
 
 image:
-  root: # default image repository address => ex) image.root/repo:tag
+  root: public.ecr.aws/k8s0f8l3/neves
 
 monitoring:
   namespace: monitoring
@@ -21,22 +21,24 @@ monitoring:
     name: grafana
     path: "/grafana"
     port: 3000
-    user: # grafana id
-    password: # grafana pw
+  jaeger:
+    name: jaeger
+    path: "/jaeger"
+    port: 80
 
 efs:
   name: efs
   storage: 20Gi
   mountPath: /recordings
-  storageClassName: # Setting values ​​when creating efs
+  storageClassName: efs-sc
 
 mediamtxServer:
   name: "mediamtx"
-  replicas: "2"
+  replicas: "1"
   image:
     root: "bluenviron"
     repo: mediamtx
-    tag: "latest"
+    tag: "latest-ffmpeg"
   port:
     srt:
       container: 8890
@@ -46,12 +48,18 @@ mediamtxServer:
       container: 9997
       service: 9997
       protocol: TCP
+    metrics:
+     container: 9998
+     service: 9998
+     protocol: TCP
   config:
     mediamtxYaml: |
       srt: yes
       srtAddress: :8890
       api: yes
       apiAddress: :9997
+      metrics: yes
+      metricsAddress: :9998
       pathDefaults:
       paths:
         '~^.*$':
@@ -62,10 +70,24 @@ mediamtxServer:
           recordPartDuration: 30s
           recordSegmentDuration: 30s
           recordDeleteAfter: 24h
+          runOnRecordSegmentComplete: |
+            echo "MTX_PATH: ${MTX_PATH}, MTX_SEGMENT_PATH: ${MTX_SEGMENT_PATH}, MTX_SEGMENT_DURATION: ${MTX_SEGMENT_DURATION}"
+      authInternalUsers:
+      - user: any
+        pass:
+        ips: []
+        permissions:
+        - action: metrics
+          path:
+        - action: publish
+          path:
+        - action: api
+          path:
+
 
 offlineServer:
   name: "offline"
-  replicas: "2"
+  replicas: "1"
   port:
     service: 8001
     container: 8000
@@ -75,7 +97,7 @@ offlineServer:
 
 dbUploadServer:
   name: "db-upload"
-  replicas: "2"
+  replicas: "1"
   image:
     repo: db-upload-server
     tag: dev
@@ -84,14 +106,10 @@ dbUploadServer:
       region: "ap-northeast-2"
       s3:
         bucket: "neves-video-bucket"
-  secret:
-    aws:
-      accessKeyId: # aws access id
-      secretAccessKey: # aws secret key
 
 statusServer:
   name: status
-  replicas: "2"
+  replicas: "1"
   image:
     repo: status-service
     tag: latest
@@ -101,17 +119,13 @@ statusServer:
     db:
       driver: "org.postgresql.Driver"
       ddl: "update"
-      url: # db url
-      name: # db name
+      url: "postgresql://neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
+      name: nevesdb
     disconnectedCron: "0 0 * * * *"
-  secret:
-    db:
-      username: # db username
-      password: # db password
 
 userServer:
   name: "user"
-  replicas: "2"
+  replicas: "1"
   image:
     repo: "user_server"
     tag: "latest"
@@ -119,36 +133,23 @@ userServer:
     container: 8000
   config:
     db:
-      host: # db url
-      name: # db name
-      port: # db port
-    corsAllowedOrigins: # corss for frontend url ex) "https://neves-box.com"
-  secret:
-    db:
-      username: # db username
-      password: # db password
-    privateKey: |
-# rsa private key for jwt
-    publicKey: |
-# rsa public key for jwt
-
+      host: "neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
+      name: "nevesdb"
+      port: "5432"
+    corsAllowedOrigins: "https://neves-box.com,http://127.0.0.1:3000,http://localhost:3000"
 
 mailServer:
   name: "mail"
-  replicas: "2"
+  replicas: "1"
   image:
     repo: "mail_server"
     tag: "latest"
   port:
     container: 8000
-  secret:
-    gmail:
-      user: # gmail email
-      password: # gmail app password
 
 playServer:
   name: "play"
-  replicas: "2"
+  replicas: "1"
   image:
     repo: "play_server"
     tag: "latest"
@@ -156,11 +157,6 @@ playServer:
     container: 8000
   config:
     cloudFront:
-      domain: # clientfront domain
+      domain: "https://d1mm9z6q5gm2lk.cloudfront.net"
       expireTime: "1"
-    corsAllowedOrigins: # cors for forntend url ex) '["https://neves-box.com"]'
-  secret:
-    s3:
-      keyPairId: # s3 key
-      privateKey: |
-# s3 private key
+    corsAllowedOrigins: '["https://neves-box.com","http://127.0.0.1:3000","http://localhost:3000"]'

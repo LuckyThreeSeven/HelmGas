@@ -19,4 +19,8 @@ spec:
     - port: {{ $.Values.dbUploadServer.service.portName }}
       path: /metrics  
       interval: 10s       
+<<<<<<< HEAD:charts/templates/monitoring/prometheus/dbUploadMonitor.yaml
       scrapeTimeout: 10s
+=======
+      scrapeTimeout: 10s
+>>>>>>> main:templates/monitoring/prometheus/dbUploadMonitor.yaml
