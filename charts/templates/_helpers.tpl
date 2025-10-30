@@ -19,7 +19,7 @@ app: {{ include "neves.name.app" . | quote }}
 
 {{- define "neves.url.image" }}
 {{- $image := merge .app.image (dict "root" .Values.image.root) -}}
-{{- printf "%s/%s:%s" $image.root $image.repo $image.tag }}
+{{- printf "%s:%s" .app.image.repo .app.image.tag }}
 {{- end -}}
 
 {{- define "neves.name.deploy" -}}

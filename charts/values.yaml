@@ -3,8 +3,6 @@ gateway:
   name: neves
   sshArn: "arn:aws:acm:ap-northeast-2:622703417916:certificate/d14d598b-3399-4180-9c8e-f9fb009f3075"
   rootDomain: neves-box.com
-image:
-  root: public.ecr.aws/k8s0f8l3/neves
 monitoring:
   namespace: monitoring
   prometheus:
@@ -31,8 +29,7 @@ mediamtxServer:
   name: "mediamtx"
   replicas: "1"
   image:
-    root: "bluenviron"
-    repo: mediamtx
+    repo: "bluenviron/mediamtx"
     tag: "latest-ffmpeg"
   port:
     srt:
