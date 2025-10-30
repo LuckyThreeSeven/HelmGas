@@ -1,0 +1,22 @@
+{{ $context := merge (dict "app" $.Values.mailServer) . -}}
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "neves.name.svc" $context }}-monitor
+  namespace: {{ $.Values.teamName }}
+  labels:
+    release: prometheus # Prometheus Operator가 이 SM을 찾도록 함
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ $.Values.teamName }}
+  selector:
+    matchLabels:
+      app: {{ include "neves.name.app" $context }}
+  endpoints:
+    - port: {{ $.Values.mailServer.service.portName }}
+      path: /metrics  
+      interval: 10s       
+      scrapeTimeout: 10s
