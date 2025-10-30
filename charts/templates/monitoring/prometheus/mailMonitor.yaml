@@ -16,7 +16,7 @@ spec:
     matchLabels:
       app: {{ include "neves.name.app" $context }}
   endpoints:
-    - port: {{ $.Values.mailServer.service.portName }}
+    - port: basic
       path: /metrics  
       interval: 10s       
       scrapeTimeout: 10s
