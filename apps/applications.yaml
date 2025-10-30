@@ -57,6 +57,20 @@ spec:
       valueFiles:
       - values.yaml
 
+      parameters:
+      - name: offlineServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+      - name: dbUploadServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+      - name: statusServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+      - name: userServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+      - name: mailServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+      - name: playServer.image.tag
+        value: DUMMY_TAG_FOR_BUGFIX
+
   destination:
     server: https://kubernetes.default.svc
 
