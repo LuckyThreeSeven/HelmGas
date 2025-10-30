@@ -11,11 +11,12 @@ metadata:
       dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server,
       status=public.ecr.aws/k8s0f8l3/neves/status-service,
       user=public.ecr.aws/k8s0f8l3/neves/user_server,
-      mail=public.ecr.aws/k8c9p1a8/neves/mail_server,
-      play=public.ecr.aws/k8c9p1a8/neves/play_server
+      mail=public.ecr.aws/k8s0f8l3/neves/mail_server,
+      play=public.ecr.aws/k8s0f8l3/neves/play_server
 
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: "helmvalues:values.yaml"
+
+    argocd-image-updater.argoproj.io/write-back-target: "helmvalues:values.yaml" 
 
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
     argocd-image-updater.argoproj.io/offline.helm.value: offlineServer.image.tag
