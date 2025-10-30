@@ -140,7 +140,7 @@ playServer:
   replicas: "1"
   image:
     repo: "public.ecr.aws/k8s0f8l3/neves/play_server"
-    tag: "cc0b5c722e0431ddb907049a23d0c83205076394"
+    tag: "923bed41ac543e7dc611ba784b3b029da775af34"
   port:
     container: 8000
   config:
