@@ -21,7 +21,7 @@ helm:
     forcestring: true
   - name: |
       {{ .Values.mailServer.image.tag }}
-    value: e38acdf4f92e386a05eace0dd02fe6ec75af029b
+    value: 24e8e92f6b30aa8cbd13b35a7036b9ba737a31cd
     forcestring: true
   - name: |
       {{ .Values.playServer.image.tag }}
