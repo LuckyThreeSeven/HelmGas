@@ -15,31 +15,37 @@ metadata:
       play=public.ecr.aws/k8s0f8l3/neves/play_server
 
     argocd-image-updater.argoproj.io/write-back-method: git
-
-    argocd-image-updater.argoproj.io/write-back-target: "helmvalues:values.yaml" 
+    
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:/charts/values.yaml 
 
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/offline.helm.value: offlineServer.image.tag
+    argocd-image-updater.argoproj.io/offline.helm.image-tag: offlineServer.image.tag
+    argocd-image-updater.argoproj.io/offline.helm.image-name: offlineServer.image.repo
     argocd-image-updater.argoproj.io/offline.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/dbupload.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/dbupload.helm.value: dbUploadServer.image.tag
+    argocd-image-updater.argoproj.io/dbupload.helm.image-tag: dbUploadServer.image.tag
+    argocd-image-updater.argoproj.io/dbupload.helm.image-name: dbUploadServer.image.repo
     argocd-image-updater.argoproj.io/dbupload.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/status.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/status.helm.value: statusServer.image.tag
+    argocd-image-updater.argoproj.io/status.helm.image-tag: statusServer.image.tag
+    argocd-image-updater.argoproj.io/status.helm.image-name: statusServer.image.repo
     argocd-image-updater.argoproj.io/status.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/user.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/user.helm.value: userServer.image.tag
+    argocd-image-updater.argoproj.io/user.helm.image-tag: userServer.image.tag
+    argocd-image-updater.argoproj.io/user.helm.image-name: userServer.image.repo
     argocd-image-updater.argoproj.io/user.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/mail.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/mail.helm.value: mailServer.image.tag
+    argocd-image-updater.argoproj.io/mail.helm.image-tag: mailServer.image.tag
+    argocd-image-updater.argoproj.io/mail.helm.image-name: mailServer.image.repo
     argocd-image-updater.argoproj.io/mail.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/play.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/play.helm.value: playServer.image.tag
+    argocd-image-updater.argoproj.io/play.helm.image-tag: playServer.image.tag
+    argocd-image-updater.argoproj.io/play.helm.image-name: playServer.image.repo
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
       
 spec:
