@@ -1,13 +1,10 @@
 teamName: neves
-
 gateway:
   name: neves
   sshArn: "arn:aws:acm:ap-northeast-2:622703417916:certificate/d14d598b-3399-4180-9c8e-f9fb009f3075"
   rootDomain: neves-box.com
-
 image:
   root: public.ecr.aws/k8s0f8l3/neves
-
 monitoring:
   namespace: monitoring
   prometheus:
@@ -25,13 +22,11 @@ monitoring:
     name: jaeger
     path: "/jaeger"
     port: 80
-
 efs:
   name: efs
   storage: 20Gi
   mountPath: /recordings
   storageClassName: efs-sc
-
 mediamtxServer:
   name: "mediamtx"
   replicas: "1"
@@ -49,9 +44,9 @@ mediamtxServer:
       service: 9997
       protocol: TCP
     metrics:
-     container: 9998
-     service: 9998
-     protocol: TCP
+      container: 9998
+      service: 9998
+      protocol: TCP
   config:
     mediamtxYaml: |
       srt: yes
@@ -83,8 +78,6 @@ mediamtxServer:
           path:
         - action: api
           path:
-
-
 offlineServer:
   name: "offline"
   replicas: "1"
@@ -92,9 +85,8 @@ offlineServer:
     service: 8001
     container: 8000
   image:
-    repo: offline-upload-server
-    tag: "chore-nvs"
-
+    repo: public.ecr.aws/k8s0f8l3/neves/offline-upload-server
+    tag: "dev"
 dbUploadServer:
   name: "db-upload"
   replicas: "1"
@@ -102,19 +94,18 @@ dbUploadServer:
     port: 8000
     portName: http-metrics
   image:
-    repo: db-upload-server
+    repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
     tag: dev
   config:
     aws:
       region: "ap-northeast-2"
       s3:
         bucket: "neves-video-bucket"
-
 statusServer:
   name: status
   replicas: "1"
   image:
-    repo: status-service
+    repo: public.ecr.aws/k8s0f8l3/neves/status-service
     tag: 4abe68becdeb989068a5e0c40a009793330d2a0a
   port:
     container: 8080
@@ -125,12 +116,11 @@ statusServer:
       url: "postgresql://neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
       name: nevesdb
     disconnectedCron: "0 0 * * * *"
-
 userServer:
   name: "user"
   replicas: "1"
   image:
-    repo: "user_server"
+    repo: "public.ecr.aws/k8s0f8l3/neves/user_server"
     tag: "4e05b1cdb37a4d3a9b13c9a0506df596164dde57"
   port:
     container: 8000
@@ -140,22 +130,20 @@ userServer:
       name: "nevesdb"
       port: "5432"
     corsAllowedOrigins: "https://neves-box.com,http://127.0.0.1:3000,http://localhost:3000"
-
 mailServer:
   name: "mail"
   replicas: "1"
   image:
-    repo: "mail_server"
+    repo: "public.ecr.aws/k8s0f8l3/neves/mail_server"
     tag: "24e8e92f6b30aa8cbd13b35a7036b9ba737a31cd"
   port:
     container: 8000
-
 playServer:
   name: "play"
   replicas: "1"
   image:
-    repo: "play_server"
-    tag: "682fed9da3b2c92a0b682666f0bc68ff5dd50a19"
+    repo: "public.ecr.aws/k8s0f8l3/neves/play_server"
+    tag: "cc0b5c722e0431ddb907049a23d0c83205076394"
   port:
     container: 8000
   config:
