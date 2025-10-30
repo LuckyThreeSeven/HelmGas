@@ -103,7 +103,7 @@ statusServer:
   replicas: "1"
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/status-service
-    tag: 4abe68becdeb989068a5e0c40a009793330d2a0a
+    tag: 9fd2421d29c525381e10817a356616f4e3a9a7f7
   port:
     container: 8080
   config:
