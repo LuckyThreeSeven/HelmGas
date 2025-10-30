@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/LuckyThreeSeven/HelmGas
+    repoURL: ssh://git@github.com/LuckyThreeSeven/HelmGas.git
     targetRevision: main
     path: apps
   destination:
