@@ -11,38 +11,32 @@ metadata:
       dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server,
       status=public.ecr.aws/k8s0f8l3/neves/status-service,
       user=public.ecr.aws/k8s0f8l3/neves/user_server,
-      mail=public.ecr.aws/k8s0f8l3/neves/mail_server,
-      play=public.ecr.aws/k8s0f8l3/neves/play_server
+      mail=public.ecr.aws/k8c9p1a8/neves/mail_server,
+      play=public.ecr.aws/k8c9p1a8/neves/play_server
 
     argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/git-branch: argocd-image-updater-test
+    argocd-image-updater.argoproj.io/write-back-target: "helmvalues:values.yaml"
 
-    argocd-image-updater.argoproj.io/offline.helm.file: values.yaml
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
     argocd-image-updater.argoproj.io/offline.helm.value: offlineServer.image.tag
     argocd-image-updater.argoproj.io/offline.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/dbupload.helm.file: values.yaml
     argocd-image-updater.argoproj.io/dbupload.update-strategy: newest-build
     argocd-image-updater.argoproj.io/dbupload.helm.value: dbUploadServer.image.tag
     argocd-image-updater.argoproj.io/dbupload.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/status.helm.file: values.yaml
     argocd-image-updater.argoproj.io/status.update-strategy: newest-build
     argocd-image-updater.argoproj.io/status.helm.value: statusServer.image.tag
     argocd-image-updater.argoproj.io/status.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/user.helm.file: values.yaml
     argocd-image-updater.argoproj.io/user.update-strategy: newest-build
     argocd-image-updater.argoproj.io/user.helm.value: userServer.image.tag
     argocd-image-updater.argoproj.io/user.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/mail.helm.file: values.yaml
     argocd-image-updater.argoproj.io/mail.update-strategy: newest-build
     argocd-image-updater.argoproj.io/mail.helm.value: mailServer.image.tag
     argocd-image-updater.argoproj.io/mail.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/play.helm.file: values.yaml
     argocd-image-updater.argoproj.io/play.update-strategy: newest-build
     argocd-image-updater.argoproj.io/play.helm.value: playServer.image.tag
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
@@ -57,26 +51,6 @@ spec:
       releaseName: neves-app
       valueFiles:
       - values.yaml
-
-      parameters:
-      - name: offlineServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
-      - name: dbUploadServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
-      - name: statusServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
-      - name: userServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
-      - name: mailServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
-      - name: playServer.image.tag
-        value: DUMMY_TAG_FOR_BUGFIX
-        forcestring: false
 
   destination:
     server: https://kubernetes.default.svc
