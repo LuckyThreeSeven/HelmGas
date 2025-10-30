@@ -21,7 +21,7 @@ helm:
     forcestring: true
   - name: |
       {{ .Values.mailServer.image.tag }}
-    value: e38acdf4f92e386a05eace0dd02fe6ec75af029b
+    value: latest
     forcestring: true
   - name: |
       {{ .Values.playServer.image.tag }}
