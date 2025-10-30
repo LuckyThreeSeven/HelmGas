@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: ssh://git@github.com/LuckyThreeSeven/HelmGas.git
-    targetRevision: argocd-image-updater-test
+    targetRevision: main
     path: apps
   destination:
     server: https://kubernetes.default.svc
