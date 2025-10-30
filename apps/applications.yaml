@@ -15,6 +15,7 @@ metadata:
       play=public.ecr.aws/k8s0f8l3/neves/play_server
 
     argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-branch: argocd-image-updater-test
 
     argocd-image-updater.argoproj.io/offline.helm.file: values.yaml
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
@@ -60,16 +61,22 @@ spec:
       parameters:
       - name: offlineServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
       - name: dbUploadServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
       - name: statusServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
       - name: userServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
       - name: mailServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
       - name: playServer.image.tag
         value: DUMMY_TAG_FOR_BUGFIX
+        forcestring: false
 
   destination:
     server: https://kubernetes.default.svc
