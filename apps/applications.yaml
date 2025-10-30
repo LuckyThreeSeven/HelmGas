@@ -52,7 +52,7 @@ spec:
   project: default
   source:
     repoURL: ssh://git@github.com/LuckyThreeSeven/HelmGas.git
-    targetRevision: main
+    targetRevision: argocd-image-updater-test
     path: charts
     helm:
       releaseName: neves-app
