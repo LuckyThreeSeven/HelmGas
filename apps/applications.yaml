@@ -55,7 +55,7 @@ spec:
     helm:
       releaseName: neves-app
       valueFiles:
-      - charts/values.yaml
+      - values.yaml
 
   destination:
     server: https://kubernetes.default.svc
