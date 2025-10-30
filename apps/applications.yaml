@@ -16,27 +16,27 @@ metadata:
 
     argocd-image-updater.argoproj.io/write-back-method: git
 
-    argocd-image-updater.argoproj.io/offline.update-strategy: latest
+    argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
     argocd-image-updater.argoproj.io/offline.helm.image-tag: |
       {{ .Values.offlineServer.image.tag }}
 
-    argocd-image-updater.argoproj.io/dbupload.update-strategy: latest
+    argocd-image-updater.argoproj.io/dbupload.update-strategy: newest-build
     argocd-image-updater.argoproj.io/dbupload.helm.image-tag: |
       {{ .Values.dbUploadServer.image.tag }}
 
-    argocd-image-updater.argoproj.io/status.update-strategy: latest
+    argocd-image-updater.argoproj.io/status.update-strategy: newest-build
     argocd-image-updater.argoproj.io/status.helm.image-tag: |
       {{ .Values.statusServer.image.tag }}
 
-    argocd-image-updater.argoproj.io/user.update-strategy: latest
+    argocd-image-updater.argoproj.io/user.update-strategy: newest-build
     argocd-image-updater.argoproj.io/user.helm.image-tag: |
       {{ .Values.userServer.image.tag }}
 
-    argocd-image-updater.argoproj.io/mail.update-strategy: latest
+    argocd-image-updater.argoproj.io/mail.update-strategy: newest-build
     argocd-image-updater.argoproj.io/mail.helm.image-tag: |
       {{ .Values.mailServer.image.tag }}
 
-    argocd-image-updater.argoproj.io/play.update-strategy: latest
+    argocd-image-updater.argoproj.io/play.update-strategy: newest-build
     argocd-image-updater.argoproj.io/play.helm.image-tag: |
       {{ .Values.playServer.image.tag }}
       
