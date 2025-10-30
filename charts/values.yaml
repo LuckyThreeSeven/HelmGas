@@ -146,7 +146,7 @@ mailServer:
   replicas: "1"
   image:
     repo: "mail_server"
-    tag: "682fed9da3b2c92a0b682666f0bc68ff5dd50a19"
+    tag: "e38acdf4f92e386a05eace0dd02fe6ec75af029b"
   port:
     container: 8000
 
