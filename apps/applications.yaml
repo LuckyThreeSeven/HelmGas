@@ -16,26 +16,32 @@ metadata:
 
     argocd-image-updater.argoproj.io/write-back-method: git
 
+    argocd-image-updater.argoproj.io/offline.helm.file: values.yaml
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
     argocd-image-updater.argoproj.io/offline.helm.value: offlineServer.image.tag
     argocd-image-updater.argoproj.io/offline.ignore-tags: latest
 
+    argocd-image-updater.argoproj.io/dbupload.helm.file: values.yaml
     argocd-image-updater.argoproj.io/dbupload.update-strategy: newest-build
     argocd-image-updater.argoproj.io/dbupload.helm.value: dbUploadServer.image.tag
     argocd-image-updater.argoproj.io/dbupload.ignore-tags: latest
 
+    argocd-image-updater.argoproj.io/status.helm.file: values.yaml
     argocd-image-updater.argoproj.io/status.update-strategy: newest-build
     argocd-image-updater.argoproj.io/status.helm.value: statusServer.image.tag
     argocd-image-updater.argoproj.io/status.ignore-tags: latest
 
+    argocd-image-updater.argoproj.io/user.helm.file: values.yaml
     argocd-image-updater.argoproj.io/user.update-strategy: newest-build
     argocd-image-updater.argoproj.io/user.helm.value: userServer.image.tag
     argocd-image-updater.argoproj.io/user.ignore-tags: latest
 
+    argocd-image-updater.argoproj.io/mail.helm.file: values.yaml
     argocd-image-updater.argoproj.io/mail.update-strategy: newest-build
     argocd-image-updater.argoproj.io/mail.helm.value: mailServer.image.tag
     argocd-image-updater.argoproj.io/mail.ignore-tags: latest
 
+    argocd-image-updater.argoproj.io/play.helm.file: values.yaml
     argocd-image-updater.argoproj.io/play.update-strategy: newest-build
     argocd-image-updater.argoproj.io/play.helm.value: playServer.image.tag
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
