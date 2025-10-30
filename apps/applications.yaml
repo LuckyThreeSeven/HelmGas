@@ -25,18 +25,19 @@ metadata:
     argocd-image-updater.argoproj.io/dbupload.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/status.update-strategy: newest-build
-    argocd-image-updater.argocd.io/status.helm.value: statusServer.image.tag
+    argocd-image-updater.argoproj.io/status.helm.value: statusServer.image.tag
     argocd-image-updater.argoproj.io/status.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/user.update-strategy: newest-build
-    argocd-image-updater.argocd.io/user.helm.value: userServer.image.tag
+    argocd-image-updater.argoproj.io/user.helm.value: userServer.image.tag
     argocd-image-updater.argoproj.io/user.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/mail.update-strategy: newest-build
-    argocd-image-updater.argocd.io/mail.helm.value: mailServer.image.tag
+    argocd-image-updater.argoproj.io/mail.helm.value: mailServer.image.tag
+    argocd-image-updater.argoproj.io/mail.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/play.update-strategy: newest-build
-    argocd-image-updater.argocd.io/play.helm.value: playServer.image.tag
+    argocd-image-updater.argoproj.io/play.helm.value: playServer.image.tag
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
       
 spec:
