@@ -25,3 +25,5 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ include "neves.name.secret" $context }}
+            - configMapRef:
+                name: {{ include "neves.name.configmap" $context }}
