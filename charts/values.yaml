@@ -132,7 +132,7 @@ mailServer:
   replicas: "1"
   image:
     repo: "public.ecr.aws/k8s0f8l3/neves/mail_server"
-    tag: "9e50da0eff3c7109af2fc19d9d1a8cd729afbc84"
+    tag: "053abfa77bc03d833f2f08f6cc2c11824ec75f1a"
   port:
     container: 8000
 playServer:
