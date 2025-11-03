@@ -113,6 +113,14 @@ statusServer:
       url: "postgresql://neves-db.cz6wi8gag9zx.ap-northeast-2.rds.amazonaws.com"
       name: nevesdb
     disconnectedCron: "0 0 * * * *"
+  destinationRule:
+    enabled: true 
+    outlierDetection:
+      consecutive5xxErrors: 3
+      interval: "10s"
+      baseEjectionTime: "40s"
+      maxEjectionPercent: 100
+
 userServer:
   name: "user"
   replicas: "1"
@@ -148,3 +156,68 @@ playServer:
       domain: "https://d1mm9z6q5gm2lk.cloudfront.net"
       expireTime: "1"
     corsAllowedOrigins: '["https://neves-box.com","http://127.0.0.1:3000","http://localhost:3000"]'
+
+combinedVideoProcessor:
+  name: "combined-streaming"
+  replicas: 1
+  port:
+    srt-udp:
+      protocol: UDP
+      service: 8890       
+      container: 8890     
+    api-tcp:
+      protocol: TCP
+      service: 9997     
+      container: 9997   
+    http-metrics:
+      protocol: TCP
+      service: 8000       
+      container: 8000   
+      
+  mediamtxContainer:
+    name: "mediamtx" 
+    image:
+      root: "bluenviron" 
+      repo: "mediamtx"
+      tag: "latest"
+    storageMountPath: /recordings
+    configMountPath: /mediamtx.yml
+    configSubPath: mediamtx.yml
+    containerPorts: 
+      - name: srt-udp
+        containerPort: 8890
+        protocol: UDP
+      - name: api-tcp
+        containerPort: 9997
+        protocol: TCP
+      - name: http-metrics
+        containerPort: 8000
+        protocol: TCP
+        
+  dbUploadContainer:
+    name: "db-upload"
+    image:
+      repo: "db-upload-server" 
+      tag: "dev"
+    storageMountPath: /recordings
+
+  volumeClaimTemplate:
+    name: "storage" 
+    accessModes: [ "ReadWriteOnce" ]
+    storage: "50Gi"
+
+  metrics:
+    portName: "http-metrics" 
+    path: "/metrics"
+    interval: "10s"
+    scrapeTimeout: "10s"
+
+ebsStorageClass:
+  name: "ebs-sc"
+  provisioner: "ebs.csi.aws.com"
+  volumeBindingMode: "WaitForFirstConsumer"
+  parameters:
+    type: "gp3"
+  allowVolumeExpansion: true
+  reclaimPolicy: "Retain"
+
