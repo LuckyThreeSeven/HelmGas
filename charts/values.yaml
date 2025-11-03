@@ -179,7 +179,7 @@ combinedVideoProcessor:
     image:
       root: "bluenviron" 
       repo: "mediamtx"
-      tag: "latest"
+      tag: "latest-ffmpeg"
     storageMountPath: /recordings
     configMountPath: /mediamtx.yml
     configSubPath: mediamtx.yml
@@ -197,8 +197,8 @@ combinedVideoProcessor:
   dbUploadContainer:
     name: "db-upload"
     image:
-      repo: "db-upload-server" 
-      tag: "dev"
+      repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
+      tag: dev
     storageMountPath: /recordings
 
   volumeClaimTemplate:
