@@ -12,7 +12,8 @@ metadata:
       status=public.ecr.aws/k8s0f8l3/neves/status-service,
       user=public.ecr.aws/k8s0f8l3/neves/user_server,
       mail=public.ecr.aws/k8s0f8l3/neves/mail_server,
-      play=public.ecr.aws/k8s0f8l3/neves/play_server
+      play=public.ecr.aws/k8s0f8l3/neves/play_server,
+      combined-streaming=public.ecr.aws/k8s0f8l3/neves/db-upload-server
 
     argocd-image-updater.argoproj.io/write-back-method: git
     
@@ -46,6 +47,11 @@ metadata:
     argocd-image-updater.argoproj.io/play.update-strategy: newest-build
     argocd-image-updater.argoproj.io/play.helm.image-tag: playServer.image.tag
     argocd-image-updater.argoproj.io/play.helm.image-name: playServer.image.repo
+    argocd-image-updater.argoproj.io/play.ignore-tags: latest
+
+    argocd-image-updater.argoproj.io/play.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/play.helm.image-tag: combinedVideoProcessor.image.tag
+    argocd-image-updater.argoproj.io/play.helm.image-name: combinedVideoProcessor.image.repo
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
       
 spec:
