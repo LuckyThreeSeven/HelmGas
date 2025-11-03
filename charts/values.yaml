@@ -177,8 +177,7 @@ combinedVideoProcessor:
   mediamtxContainer:
     name: "mediamtx" 
     image:
-      root: "bluenviron" 
-      repo: "mediamtx"
+      repo: "bluenviron/mediamtx"
       tag: "latest-ffmpeg"
     storageMountPath: /recordings
     configMountPath: /mediamtx.yml
