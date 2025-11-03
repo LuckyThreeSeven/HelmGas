@@ -1,0 +1,67 @@
+{{ $context := merge (dict "app" $.Values.combinedVideoProcessor) . }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "neves.name.app" $context }}
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{ include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  replicas: {{ $context.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "neves.name.app" $context }}
+
+  serviceName: {{ include "neves.name.app" $context }}-headless
+
+  template:
+    metadata:
+      labels:
+        {{ include "neves.commonLabels" $context | nindent 8 }}
+    spec:
+      volumes:
+        {{ $mediamtxContext := merge (dict "app" $.Values.combinedVideoProcessor.mediamtxContainer) . }}
+        - name: mediamtx-config-volume
+          configMap:
+            name: {{ include "neves.name.configmap" $mediamtxContext }}
+      
+      containers:
+        - name: {{ include "neves.name.container" $mediamtxContext }}
+          image: {{ include "neves.url.image" $mediamtxContext }}
+          
+          ports:
+            {{ range $port := $context.app.mediamtxContainer.containerPorts }}
+            - containerPort: {{ $port.containerPort }}
+              protocol: {{ $port.protocol }}
+              name: {{ $port.name }}
+             {{ end }}
+          
+          volumeMounts:
+            - name: {{ $context.app.volumeClaimTemplate.name }}
+              mountPath: {{ $context.app.mediamtxContainer.storageMountPath }}
+            - name: mediamtx-config-volume
+              mountPath: {{ $context.app.mediamtxContainer.configMountPath }}
+              subPath: {{ $context.app.mediamtxContainer.configSubPath }}
+        
+      {{ $dbUploadContext := merge (dict "app" $.Values.combinedVideoProcessor.dbUploadContainer) . }}
+        - name: {{ include "neves.name.container" $dbUploadContext }}
+          image: {{ include "neves.url.image" $dbUploadContext }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "neves.name.configmap" $dbUploadContext }}
+            - secretRef:
+                name: {{ include "neves.name.secret" $dbUploadContext }}
+          volumeMounts:
+            - name: {{ $context.app.volumeClaimTemplate.name }}
+              mountPath: {{ $context.app.dbUploadContainer.storageMountPath }}
+
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ $context.app.volumeClaimTemplate.name }}
+    spec:
+      accessModes: {{ $context.app.volumeClaimTemplate.accessModes }}
+      storageClassName: {{ $.Values.ebsStorageClass.name }}
+      resources:
+        requests:
+          storage: {{ $context.app.volumeClaimTemplate.storage }}
+

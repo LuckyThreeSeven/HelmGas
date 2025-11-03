@@ -1,0 +1,20 @@
+{{ $context := merge (dict "app" $.Values.combinedVideoProcessor) . -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "neves.name.app" $context }}-headless 
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  clusterIP: None # Headless Service
+  selector:
+    app: {{ include "neves.name.app" $context }} 
+  ports:
+{{- range $name, $port := $context.app.port }}
+    - protocol: {{ $port.protocol }}
+      port: {{ $port.service }}
+      targetPort: {{ $port.container }}
+      name: {{ $name }}
+{{ end }}
