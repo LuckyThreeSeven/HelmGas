@@ -92,7 +92,7 @@ dbUploadServer:
     portName: http-metrics
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-    tag: dev
+    tag: bb288b84873c91ec35887556c5f246e3869f5983
   config:
     aws:
       region: "ap-northeast-2"
@@ -205,7 +205,7 @@ combinedVideoProcessor:
     interval: "10s"
     scrapeTimeout: "10s"
   image:
-    tag: dev
+    tag: bb288b84873c91ec35887556c5f246e3869f5983
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
 ebsStorageClass:
   name: "ebs-sc"
