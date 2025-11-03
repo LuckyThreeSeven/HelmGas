@@ -49,10 +49,10 @@ metadata:
     argocd-image-updater.argoproj.io/play.helm.image-name: playServer.image.repo
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
 
-    argocd-image-updater.argoproj.io/play.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/play.helm.image-tag: combinedVideoProcessor.image.tag
-    argocd-image-updater.argoproj.io/play.helm.image-name: combinedVideoProcessor.image.repo
-    argocd-image-updater.argoproj.io/play.ignore-tags: latest
+    argocd-image-updater.argoproj.io/combined-streaming.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/combined-streaming.helm.image-tag: combinedVideoProcessor.image.tag
+    argocd-image-updater.argoproj.io/combined-streaming.helm.image-name: combinedVideoProcessor.image.repo
+    argocd-image-updater.argoproj.io/combined-streaming.ignore-tags: latest
       
 spec:
   project: default
