@@ -1,0 +1,19 @@
+{{ $context := merge (dict "app" $.Values.statusServer) . -}}
+
+{{- if $context.app.destinationRule.enabled }}
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ include "neves.name.app" $context }}-dr
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{- include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  host: {{ include "neves.name.svc" $context }}
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: {{ $context.app.destinationRule.outlierDetection.consecutive5xxErrors }}
+      interval: {{ $context.app.destinationRule.outlierDetection.interval }}
+      baseEjectionTime: {{ $context.app.destinationRule.outlierDetection.baseEjectionTime }}
+      maxEjectionPercent: {{ $context.app.destinationRule.outlierDetection.maxEjectionPercent }}
+{{- end }}
