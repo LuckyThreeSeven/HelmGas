@@ -92,7 +92,7 @@ dbUploadServer:
     portName: http-metrics
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-    tag: bb288b84873c91ec35887556c5f246e3869f5983
+    tag: 6d0b335ceedf2d01cddd188bcfaa7e0388fe630d
   config:
     aws:
       region: "ap-northeast-2"
@@ -193,7 +193,7 @@ combinedVideoProcessor:
     name: "db-upload"
     image:
       repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-      tag: dev
+      tag: 6d0b335ceedf2d01cddd188bcfaa7e0388fe630d
     storageMountPath: /recordings
   volumeClaimTemplate:
     name: "storage"
