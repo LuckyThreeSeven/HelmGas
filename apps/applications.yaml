@@ -16,8 +16,8 @@ metadata:
       combined-streaming=public.ecr.aws/k8s0f8l3/neves/db-upload-server
 
     argocd-image-updater.argoproj.io/write-back-method: git
-    
-    argocd-image-updater.argoproj.io/write-back-target: helmvalues:/charts/values.yaml 
+
+    argocd-image-updater.argoproj.io/write-back-target: helmvalues:/charts/values.yaml
 
     argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
     argocd-image-updater.argoproj.io/offline.helm.image-tag: offlineServer.image.tag
@@ -50,10 +50,10 @@ metadata:
     argocd-image-updater.argoproj.io/play.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/combined-streaming.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/combined-streaming.helm.image-tag: combinedVideoProcessor.image.tag
-    argocd-image-updater.argoproj.io/combined-streaming.helm.image-name: combinedVideoProcessor.image.repo
+    argocd-image-updater.argoproj.io/combined-streaming.helm.image-tag: combinedVideoProcessor.dbUploadContainer.image.tag
+    argocd-image-updater.argoproj.io/combined-streaming.helm.image-name: combinedVideoProcessor.dbUploadContainer.image.repo
     argocd-image-updater.argoproj.io/combined-streaming.ignore-tags: latest
-      
+
 spec:
   project: default
   source:
