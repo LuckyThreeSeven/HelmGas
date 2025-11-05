@@ -10,3 +10,4 @@ metadata:
 data:
   mediamtx.yml: |
 {{ $.Values.mediamtxServer.config.mediamtxYaml | indent 4 }}
+안녕
