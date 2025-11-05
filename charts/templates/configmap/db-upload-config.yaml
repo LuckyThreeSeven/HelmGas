@@ -13,4 +13,9 @@ data:
   AWS_DEFAULT_REGION: {{ .aws.region | quote }}
   S3_BUCKET_NAME: {{ .aws.s3.bucket | quote  }}
   STATUS_SERVER_URL: {{ printf "http://%s/metadata" (include "neves.url.svc" $statusApp) | quote }}
+  NUM_WORKERS: {{ .workers.normal | quote}}
+  NUM_RETRY_WORKERS: {{ .workers.retry | quote }}
+  MAX_RETRIES: {{ .failure.threshold | quote }}
+  RETRY_DELAY_MINUTES: {{ .failure.retryMinutes | quote }}
+  SCHEDULER_INTERVAL_SECONDS: {{ .failure.rescheduleSeconds | quote }}
   {{ end -}}

@@ -98,6 +98,14 @@ dbUploadServer:
       region: "ap-northeast-2"
       s3:
         bucket: "neves-video-bucket"
+      workers:
+        normal: 3
+        retry: 1
+      failure:
+        threshold: 3
+        retryMinutes: 10
+        rescheduleSeconds: 60
+
 statusServer:
   name: status
   replicas: "1"
