@@ -98,6 +98,7 @@ dbUploadServer:
       region: "ap-northeast-2"
       s3:
         bucket: "neves-video-bucket"
+      scanIntervalSeconds: 10
       workers:
         normal: 3
         retry: 1
