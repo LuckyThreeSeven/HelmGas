@@ -27,7 +27,7 @@ efs:
   storageClassName: efs-sc
 mediamtxServer:
   name: "mediamtx"
-  replicas: "1"
+  replicas: "3"
   image:
     repo: "bluenviron/mediamtx"
     tag: "latest-ffmpeg"
@@ -86,7 +86,7 @@ offlineServer:
     tag: "dev"
 dbUploadServer:
   name: "db-upload"
-  replicas: "1"
+  replicas: "3"
   service:
     port: 8000
     portName: http-metrics
@@ -165,7 +165,7 @@ playServer:
     corsAllowedOrigins: '["https://neves-box.com","http://127.0.0.1:3000","http://localhost:3000"]'
 combinedVideoProcessor:
   name: "combined-streaming"
-  replicas: 1
+  replicas: 3
   port:
     srt-udp:
       protocol: UDP
