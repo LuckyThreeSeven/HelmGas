@@ -92,7 +92,7 @@ dbUploadServer:
     portName: http-metrics
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-    tag: fe7db2fd17f7206694ffebfbcc9914683b93f64d
+    tag: 955deb28ef965a3ce943c16f6e144d11e82070ae
   config:
     aws:
       region: "ap-northeast-2"
@@ -106,7 +106,6 @@ dbUploadServer:
       threshold: 3
       retryMinutes: 10
       rescheduleSeconds: 60
-
 statusServer:
   name: status
   replicas: "1"
@@ -202,7 +201,7 @@ combinedVideoProcessor:
     name: "db-upload"
     image:
       repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-      tag: fe7db2fd17f7206694ffebfbcc9914683b93f64d
+      tag: 955deb28ef965a3ce943c16f6e144d11e82070ae
     storageMountPath: /recordings
   volumeClaimTemplate:
     name: "storage"
