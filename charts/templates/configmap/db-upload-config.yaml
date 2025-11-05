@@ -20,3 +20,5 @@ data:
   RETRY_DELAY_MINUTES: {{ .failure.retryMinutes | quote }}
   SCHEDULER_INTERVAL_SECONDS: {{ .failure.rescheduleSeconds | quote }}
   {{ end -}}
+  LATENCY_BUCKETS: {{ $.Values.metrics.buckets.latency | quote }}
+  SCAN_BUCKETS: {{ $.Values.metrics.buckets.scan | quote }}
