@@ -51,6 +51,12 @@ spec:
                 name: {{ include "neves.name.configmap" $dbUploadContext }}
             - secretRef:
                 name: {{ include "neves.name.secret" $dbUploadContext }}
+          ports:
+          {{- range $port := $context.app.ports }}
+            - name: {{ $port.name }}
+              containerPort: {{ $port.containerPort }}
+              protocol: {{ $port.protocol }}
+          {{- end }}
           volumeMounts:
             - name: {{ $context.app.volumeClaimTemplate.name }}
               mountPath: {{ $context.app.dbUploadContainer.storageMountPath }}

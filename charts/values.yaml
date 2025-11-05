@@ -194,9 +194,6 @@ combinedVideoProcessor:
     - name: api-tcp
       containerPort: 9997
       protocol: TCP
-    - name: http-metrics
-      containerPort: 8000
-      protocol: TCP
   dbUploadContainer:
     name: "db-upload"
     image:
@@ -207,6 +204,10 @@ combinedVideoProcessor:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
     storage: "50Gi"
+  ports:
+    - name: http-metrics
+      containerPort: 8000
+      protocol: TCP
   metrics:
     portName: "http-metrics"
     path: "/metrics"
