@@ -1,4 +1,3 @@
-{{- if .Values.grafana.slackWebhookUrl }}
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaAlertingContactPoint
 metadata:
@@ -18,4 +17,3 @@ spec:
         secret:
           name: grafana-slack-webhook-secret
           key: slack_url
-{{- end }}
