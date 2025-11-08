@@ -194,6 +194,13 @@ combinedVideoProcessor:
     - name: api-tcp
       containerPort: 9997
       protocol: TCP
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1.5Gi"
+        cpu: "1500m"
   dbUploadContainer:
     name: "db-upload"
     image:
@@ -208,6 +215,13 @@ combinedVideoProcessor:
     - name: http-metrics
       containerPort: 8000
       protocol: TCP
+  resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "300m"
   metrics:
     portName: "http-metrics"
     path: "/metrics"
