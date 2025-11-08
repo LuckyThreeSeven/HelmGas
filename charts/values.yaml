@@ -188,10 +188,10 @@ combinedVideoProcessor:
     resources:
       requests:
         memory: "1024Mi"  
-        cpu: "1000m"     
+        cpu: "1"
       limits:
         memory:  "1024Mi" 
-        cpu: "1000m"  
+        cpu: "1"
   dbUploadContainer:
     name: "db-upload"
     image:
@@ -201,10 +201,10 @@ combinedVideoProcessor:
     resources:
       requests:
         memory: "1024Mi"  
-        cpu: "1000m"     
+        cpu: "1"
       limits:
         memory:  "1024Mi" 
-        cpu: "1000m"  
+        cpu: "1"
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
