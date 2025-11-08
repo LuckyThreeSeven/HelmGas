@@ -201,10 +201,10 @@ combinedVideoProcessor:
     resources:
       requests:
         memory: "1024Mi"  
-        cpu: "1"
+        cpu: "500m"
       limits:
         memory:  "1024Mi" 
-        cpu: "1"
+        cpu: "500m"
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
