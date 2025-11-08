@@ -75,15 +75,6 @@ mediamtxServer:
           path:
         - action: api
           path:
-offlineServer:
-  name: "offline"
-  replicas: "1"
-  port:
-    service: 8001
-    container: 8000
-  image:
-    repo: public.ecr.aws/k8s0f8l3/neves/offline-upload-server
-    tag: "dev"
 dbUploadServer:
   name: "db-upload"
   replicas: "3"
