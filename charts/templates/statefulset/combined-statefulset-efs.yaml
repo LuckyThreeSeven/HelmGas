@@ -35,7 +35,15 @@ spec:
               protocol: {{ $port.protocol }}
               name: {{ $port.name }}
              {{ end }}
-          
+
+          resources:
+            requests:
+              memory: {{ $mediamtxContext.resources.requests.memory }}
+              cpu: {{ $mediamtxContext.resources.requests.cpu }}
+            limits:
+              memory: {{ $mediamtxContext.resources.limits.mempry }}\
+              cpu: {{ $mediamtxContext.resources.limits.cpu }}
+
           volumeMounts:
             - name: {{ $context.app.volumeClaimTemplate.name }}
               mountPath: {{ $context.app.mediamtxContainer.storageMountPath }}
@@ -57,6 +65,15 @@ spec:
               containerPort: {{ $port.containerPort }}
               protocol: {{ $port.protocol }}
           {{- end }}
+
+          resources:
+            requests:
+              memory: {{ $dbUploadContext.resources.requests.memory }}
+              cpu: {{ $dbUploadContext.resources.requests.cpu }}
+            limits:
+              memory: {{ $dbUploadContext.resources.limits.mempry }}
+              cpu: {{ $dbUploadContext.resources.limits.cpu }}
+
           volumeMounts:
             - name: {{ $context.app.volumeClaimTemplate.name }}
               mountPath: {{ $context.app.dbUploadContainer.storageMountPath }}
