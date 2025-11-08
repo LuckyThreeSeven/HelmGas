@@ -1,0 +1,17 @@
+{{- $files := .Files.Glob "grafanaDashboard/app/*.json" }}
+{{- range $path, $bytes := $files }}
+{{- $name := trimSuffix ".json" (base $path) }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ printf "grafana-app-%s" $name | lower | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Values.teamName }} 
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana: neves 
+  folder: "failed Dashboards" 
+  json: |
+{{ $.Files.Get $path | indent 4 }}
+{{- end }}
