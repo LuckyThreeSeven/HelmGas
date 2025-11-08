@@ -41,7 +41,7 @@ spec:
               memory: {{ $mediamtxContext.resources.requests.memory }}
               cpu: {{ $mediamtxContext.resources.requests.cpu }}
             limits:
-              memory: {{ $mediamtxContext.resources.limits.mempry }}\
+              memory: {{ $mediamtxContext.resources.limits.memory }}
               cpu: {{ $mediamtxContext.resources.limits.cpu }}
 
           volumeMounts:
@@ -71,7 +71,7 @@ spec:
               memory: {{ $dbUploadContext.resources.requests.memory }}
               cpu: {{ $dbUploadContext.resources.requests.cpu }}
             limits:
-              memory: {{ $dbUploadContext.resources.limits.mempry }}
+              memory: {{ $dbUploadContext.resources.limits.memory }}
               cpu: {{ $dbUploadContext.resources.limits.cpu }}
 
           volumeMounts:
