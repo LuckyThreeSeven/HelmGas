@@ -1,0 +1,22 @@
+{{ $context := merge (dict "app" $.Values.combinedVideoProcessor) . }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "neves.name.app" $context }}-hpa
+  namespace: {{ $.Values.teamName }}
+  labels:
+    {{ include "neves.commonLabels" $context | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: {{ include "neves.name.app" $context }} 
+  minReplicas: {{ $context.app.replicas }}
+  maxReplicas: 8
+  metrics:
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
