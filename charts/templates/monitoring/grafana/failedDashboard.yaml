@@ -7,8 +7,6 @@ kind: GrafanaDashboard
 metadata:
   name: {{ printf "grafana-app-%s" $name | lower | trunc 63 | trimSuffix "-" }}
   namespace: {{ $.Values.teamName }} 
-  labels:
-    {{- include "neves.commonLabels" (merge (dict "app" (dict "name" "grafana-dashboards")) .) | nindent 4 }}
 spec:
   instanceSelector:
     matchLabels:
