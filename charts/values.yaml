@@ -187,11 +187,11 @@ combinedVideoProcessor:
       protocol: TCP
     resources:
       requests:
-        memory: "512Mi"
-        cpu: "500m"
+        memory: "1024Mi"  
+        cpu: "1000m"     
       limits:
-        memory: "512Mi"
-        cpu: "500m"
+        memory:  "1024Mi" 
+        cpu: "1000m"  
   dbUploadContainer:
     name: "db-upload"
     image:
@@ -200,11 +200,11 @@ combinedVideoProcessor:
     storageMountPath: /recordings
     resources:
       requests:
-        memory: "512Mi"
-        cpu: "500m"
+        memory: "1024Mi"  
+        cpu: "1000m"     
       limits:
-        memory: "512Mi"
-        cpu: "500m"
+        memory:  "1024Mi" 
+        cpu: "1000m"  
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
