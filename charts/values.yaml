@@ -27,7 +27,7 @@ efs:
   storageClassName: efs-sc
 mediamtxServer:
   name: "mediamtx"
-  replicas: "3"
+  replicas: "1"
   image:
     repo: "bluenviron/mediamtx"
     tag: "latest-ffmpeg"
@@ -77,7 +77,7 @@ mediamtxServer:
           path:
 dbUploadServer:
   name: "db-upload"
-  replicas: "3"
+  replicas: "1"
   service:
     port: 8000
     portName: http-metrics
