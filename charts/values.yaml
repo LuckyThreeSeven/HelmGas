@@ -207,6 +207,13 @@ combinedVideoProcessor:
       repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
       tag: 30594580157ba5c0f2ba9e41881de457bd220d7f
     storageMountPath: /recordings
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "300m"
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
@@ -215,13 +222,6 @@ combinedVideoProcessor:
     - name: http-metrics
       containerPort: 8000
       protocol: TCP
-  resources:
-      requests:
-        memory: "128Mi"
-        cpu: "100m"
-      limits:
-        memory: "512Mi"
-        cpu: "300m"
   metrics:
     portName: "http-metrics"
     path: "/metrics"
