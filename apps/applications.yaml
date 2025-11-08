@@ -7,7 +7,6 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
   annotations:
     argocd-image-updater.argoproj.io/image-list: >
-      offline=public.ecr.aws/k8s0f8l3/neves/offline-upload-server,
       dbupload=public.ecr.aws/k8s0f8l3/neves/db-upload-server,
       status=public.ecr.aws/k8s0f8l3/neves/status-service,
       user=public.ecr.aws/k8s0f8l3/neves/user_server,
@@ -18,11 +17,6 @@ metadata:
     argocd-image-updater.argoproj.io/write-back-method: git
 
     argocd-image-updater.argoproj.io/write-back-target: helmvalues:/charts/values.yaml
-
-    argocd-image-updater.argoproj.io/offline.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/offline.helm.image-tag: offlineServer.image.tag
-    argocd-image-updater.argoproj.io/offline.helm.image-name: offlineServer.image.repo
-    argocd-image-updater.argoproj.io/offline.ignore-tags: latest
 
     argocd-image-updater.argoproj.io/dbupload.update-strategy: newest-build
     argocd-image-updater.argoproj.io/dbupload.helm.image-tag: dbUploadServer.image.tag
