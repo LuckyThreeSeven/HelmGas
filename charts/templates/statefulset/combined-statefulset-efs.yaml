@@ -7,7 +7,6 @@ metadata:
   labels:
     {{ include "neves.commonLabels" $context | nindent 4 }}
 spec:
-  replicas: {{ $context.app.replicas }}
   selector:
     matchLabels:
       app: {{ include "neves.name.app" $context }}
