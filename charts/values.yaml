@@ -185,12 +185,26 @@ combinedVideoProcessor:
     - name: api-tcp
       containerPort: 9997
       protocol: TCP
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "500m"
+      limits:
+        memory: "1.5Gi"
+        cpu: "1500m"
   dbUploadContainer:
     name: "db-upload"
     image:
       repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
       tag: 30594580157ba5c0f2ba9e41881de457bd220d7f
     storageMountPath: /recordings
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "512Mi"
+        cpu: "300m"
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
