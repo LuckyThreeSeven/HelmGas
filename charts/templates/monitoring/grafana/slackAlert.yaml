@@ -1,0 +1,19 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaContactPoint
+metadata:
+  name: slack-monitoring-contact-point
+  namespace: {{ .Values.monitoring.namespace }}
+spec:
+  instanceSelector:
+    matchLabels:
+      grafana: neves
+  name: "Slack (Monitoring failed file)"
+  type: slack
+  disableResolveMessage: false
+  settings:
+    valuesFrom:
+      - targetPath: url
+        valueFrom:
+          secretKeyRef:
+            name: slack-monitoring-secret
+            key: slack-url
