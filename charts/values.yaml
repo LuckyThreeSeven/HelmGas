@@ -57,13 +57,16 @@ mediamtxServer:
         '~^.*$':
           source: publisher
           record: yes
-          recordPath: ./recordings/%path/%Y%m%d-%H%M%S
+          recordPath: ./recordings/writing/%path/%Y%m%d-%H%M%S
           recordFormat: fmp4
           recordPartDuration: 30s
           recordSegmentDuration: 30s
           recordDeleteAfter: 24h
           runOnRecordSegmentComplete: |
-            echo "MTX_PATH: ${MTX_PATH}, MTX_SEGMENT_PATH: ${MTX_SEGMENT_PATH}, MTX_SEGMENT_DURATION: ${MTX_SEGMENT_DURATION}"
+            /bin/sh -c "
+              mkdir -p \"$(dirname \"$(printf %s \"${MTX_SEGMENT_PATH}\" | sed 's#/writing/#/ready/#')\")\" \
+              && mv \"${MTX_SEGMENT_PATH}\" \"$(printf %s \"${MTX_SEGMENT_PATH}\" | sed 's#/writing/#/ready/#')\"
+            "
       authInternalUsers:
       - user: any
         pass:
