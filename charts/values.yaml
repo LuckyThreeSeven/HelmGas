@@ -31,6 +31,13 @@ mediamtxServer:
   image:
     repo: "bluenviron/mediamtx"
     tag: "latest-ffmpeg"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1.5Gi"
+      cpu: "1500m"
   port:
     srt:
       container: 8890
@@ -84,6 +91,13 @@ dbUploadServer:
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
     tag: 30594580157ba5c0f2ba9e41881de457bd220d7f
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "300m"
   config:
     aws:
       region: "ap-northeast-2"

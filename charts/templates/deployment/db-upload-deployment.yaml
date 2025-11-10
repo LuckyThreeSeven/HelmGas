@@ -7,7 +7,7 @@ metadata:
   namespace: {{ $.Values.teamName }}
   labels:
     {{ include "neves.commonLabels" $context | nindent 4 }}
-    app: {{ include "neves.name.app" $context }} 
+    app: {{ include "neves.name.app" $context }}
 spec:
   replicas: {{ $context.app.replicas }}
   selector:
@@ -17,13 +17,20 @@ spec:
     metadata:
       labels:
         {{- include "neves.commonLabels" $context | nindent 8 }}
-        app: {{ include "neves.name.app" $context }} 
+        app: {{ include "neves.name.app" $context }}
     spec:
       containers:
         - name: {{ include "neves.name.container" $context }}
           image: {{ include "neves.url.image" $context }}
+          resources:
+            requests:
+              memory: {{ $context.app.resources.requests.memory }}
+              cpu: {{ $context.app.resources.requests.cpu }}
+            limits:
+              memory: {{ $context.app.resources.limits.memory }}
+              cpu: {{ $context.app.resources.limits.cpu }}
           ports:
-            - name: {{ $.Values.dbUploadServer.service.portName }} 
+            - name: {{ $.Values.dbUploadServer.service.portName }}
               containerPort: {{ $.Values.dbUploadServer.service.port }}
               protocol: TCP
           envFrom:

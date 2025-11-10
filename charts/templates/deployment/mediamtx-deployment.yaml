@@ -20,6 +20,13 @@ spec:
       containers:
       - name: {{ include "neves.name.container" $context }}
         image: {{ include "neves.url.image" $context }}
+        resources:
+          requests:
+            memory: {{ $context.app.resources.requests.memory }}
+            cpu: {{ $context.app.resources.requests.cpu }}
+          limits:
+            memory: {{ $context.app.resources.limits.memory }}
+            cpu: {{ $context.app.resources.limits.cpu }}
         ports:
 {{- range $port := $context.app.port }}
         - containerPort: {{ $port.container }}
