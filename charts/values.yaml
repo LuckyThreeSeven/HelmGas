@@ -93,7 +93,7 @@ dbUploadServer:
     portName: http-metrics
   image:
     repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-    tag: 30594580157ba5c0f2ba9e41881de457bd220d7f
+    tag: cba3a19d35556568d91490fa43c1c35f86ed6640
   resources:
     requests:
       memory: "128Mi"
