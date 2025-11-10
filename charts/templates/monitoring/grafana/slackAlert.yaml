@@ -2,18 +2,18 @@ apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaContactPoint
 metadata:
   name: slack-monitoring-contact-point
-  namespace: {{ .Values.teamName }}
-  labels:
-    {{- include "neves.commonLabels" (merge (dict "app" (dict "name" "grafana-alerting")) .) | nindent 4 }}
+  namespace: {{ .Values.monitoring.namespace }}
 spec:
   instanceSelector:
     matchLabels:
       grafana: neves
   name: "Slack (Monitoring failed file)"
-  slack:
-    - uid: "df372ayf3ad4xe"
-      disableResolveMessage: false
-      url:
-        secret:
-          name: grafana-slack-webhook-secret
-          key: slack_url
+  type: slack
+  disableResolveMessage: false
+  settings:
+    valuesFrom:
+      - targetPath: url
+        valueFrom:
+          secretKeyRef:
+            name: slack-monitoring-secret
+            key: slack-url

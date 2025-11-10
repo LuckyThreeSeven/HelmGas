@@ -27,7 +27,7 @@ efs:
   storageClassName: efs-sc
 mediamtxServer:
   name: "mediamtx"
-  replicas: "3"
+  replicas: "1"
   image:
     repo: "bluenviron/mediamtx"
     tag: "latest-ffmpeg"
@@ -64,13 +64,16 @@ mediamtxServer:
         '~^.*$':
           source: publisher
           record: yes
-          recordPath: ./recordings/%path/%Y%m%d-%H%M%S
+          recordPath: ./recordings/writing/%path/%Y%m%d-%H%M%S
           recordFormat: fmp4
           recordPartDuration: 30s
           recordSegmentDuration: 30s
           recordDeleteAfter: 24h
           runOnRecordSegmentComplete: |
-            echo "MTX_PATH: ${MTX_PATH}, MTX_SEGMENT_PATH: ${MTX_SEGMENT_PATH}, MTX_SEGMENT_DURATION: ${MTX_SEGMENT_DURATION}"
+            /bin/sh -c "
+              mkdir -p \"$(dirname \"$(printf %s \"${MTX_SEGMENT_PATH}\" | sed 's#/writing/#/ready/#')\")\" \
+              && mv \"${MTX_SEGMENT_PATH}\" \"$(printf %s \"${MTX_SEGMENT_PATH}\" | sed 's#/writing/#/ready/#')\"
+            "
       authInternalUsers:
       - user: any
         pass:
@@ -84,7 +87,7 @@ mediamtxServer:
           path:
 dbUploadServer:
   name: "db-upload"
-  replicas: "3"
+  replicas: "1"
   service:
     port: 8000
     portName: http-metrics
@@ -170,7 +173,7 @@ playServer:
     corsAllowedOrigins: '["https://neves-box.com","http://127.0.0.1:3000","http://localhost:3000"]'
 combinedVideoProcessor:
   name: "combined-streaming"
-  replicas: 3
+  replicas: 1
   port:
     srt-udp:
       protocol: UDP
@@ -201,32 +204,32 @@ combinedVideoProcessor:
       protocol: TCP
     resources:
       requests:
-        memory: "512Mi"
+        memory: "1024Mi"
         cpu: "500m"
       limits:
-        memory: "1.5Gi"
-        cpu: "1500m"
+        memory: "1024Mi"
+        cpu: "500m"
   dbUploadContainer:
     name: "db-upload"
     image:
       repo: public.ecr.aws/k8s0f8l3/neves/db-upload-server
-      tag: 30594580157ba5c0f2ba9e41881de457bd220d7f
+      tag: cba3a19d35556568d91490fa43c1c35f86ed6640
     storageMountPath: /recordings
     resources:
       requests:
-        memory: "128Mi"
-        cpu: "100m"
+        memory: "1024Mi"
+        cpu: "500m"
       limits:
-        memory: "512Mi"
-        cpu: "300m"
+        memory: "1024Mi"
+        cpu: "500m"
   volumeClaimTemplate:
     name: "storage"
     accessModes: ["ReadWriteOnce"]
     storage: "50Gi"
   ports:
-    - name: http-metrics
-      containerPort: 8000
-      protocol: TCP
+  - name: http-metrics
+    containerPort: 8000
+    protocol: TCP
   metrics:
     portName: "http-metrics"
     path: "/metrics"
@@ -245,5 +248,5 @@ ebsStorageClass:
   reclaimPolicy: "Retain"
 metrics:
   buckets:
-    latency: "1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 9.0, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9, 10.0"
+    latency: "0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8, 8.9, 9.0, 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 9.9, 10.0"
     scan: "0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 3, 5"
