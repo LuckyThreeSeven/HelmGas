@@ -66,8 +66,8 @@ mediamtxServer:
           record: yes
           recordPath: ./recordings/writing/%path/%Y%m%d-%H%M%S
           recordFormat: fmp4
-          recordPartDuration: 10s
-          recordSegmentDuration: 10s
+          recordPartDuration: 30s
+          recordSegmentDuration: 30s
           recordDeleteAfter: 24h
           runOnRecordSegmentComplete: |
             /bin/sh -c "
