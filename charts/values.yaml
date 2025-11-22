@@ -127,7 +127,7 @@ statusServer:
       driver: "org.postgresql.Driver"
       ddl: "update"
       url: "postgresql://neves-db.cdawmk664vxo.ap-northeast-2.rds.amazonaws.com"
-      name: nevesdb
+      name: nevesdb?sslmode=require
     disconnectedCron: "0 0 * * * *"
   destinationRule:
     enabled: true
