@@ -1,7 +1,7 @@
 teamName: neves
 gateway:
   name: neves
-  sshArn: "arn:aws:acm:ap-northeast-2:622703417916:certificate/d14d598b-3399-4180-9c8e-f9fb009f3075"
+  sshArn: "arn:aws:acm:ap-northeast-2:438465134317:certificate/7d9d2028-a182-47fb-95b5-49400bb1bc40"
   rootDomain: neves-box.com
 monitoring:
   namespace: monitoring
