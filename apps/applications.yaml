@@ -52,7 +52,7 @@ spec:
   project: default
   source:
     repoURL: ssh://git@github.com/LuckyThreeSeven/HelmGas.git
-    targetRevision: main
+    targetRevision: yemin
     path: charts
     helm:
       releaseName: neves-app
